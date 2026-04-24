@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
 import { useIsMobile } from '@/lib/useIsMobile';
@@ -41,12 +42,34 @@ export default function HeroPage({ setPage }: Props) {
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0D0D0D', overflow: 'clip' }}>
       <BlueprintSVG px={px} py={py}/>
 
+      {/* Logo */}
+      <div style={{
+        position: 'absolute',
+        top: mobile ? 28 : 36,
+        left: '50%',
+        transform: `translateX(-50%) translate(${mobile ? 0 : px * -6}px, ${mobile ? 0 : py * -4}px)`,
+        transition: 'transform 0.1s linear',
+        zIndex: 2,
+        animation: 'fadeIn 0.8s ease both',
+        animationDelay: '0.4s',
+        opacity: 0,
+      }}>
+        <Image
+          src="/yamelogo.png"
+          alt="Yamela"
+          width={mobile ? 100 : 130}
+          height={mobile ? 40 : 52}
+          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+          priority
+        />
+      </div>
+
       {/* Text */}
       <div style={{
         position: 'absolute',
         left: '6%',
         bottom: mobile ? 84 : '11%',
-        maxWidth: mobile ? '80%' : '60%',
+        maxWidth: mobile ? '82%' : '60%',
         display: 'flex', flexDirection: 'column',
         transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,
         transition: 'transform 0.1s linear',
@@ -85,11 +108,13 @@ export default function HeroPage({ setPage }: Props) {
             style={{
               alignSelf: 'flex-start',
               padding: mobile ? '11px 28px' : '13px 36px',
-              border: `0.5px solid ${T.accent}`,
+              border: `1px solid ${T.accent}`,
               background: 'transparent', color: T.accent,
               fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
               textTransform: 'uppercase', cursor: 'pointer', transition: 'background 0.35s, color 0.35s',
               whiteSpace: 'nowrap',
+              WebkitAppearance: 'none', appearance: 'none', borderRadius: 0,
+              outline: 'none',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = T.accent; (e.currentTarget as HTMLButtonElement).style.color = '#0D0D0D'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = T.accent; }}
@@ -98,30 +123,6 @@ export default function HeroPage({ setPage }: Props) {
           </button>
         </div>
       </div>
-
-      {/* Indicateur — vertical desktop, horizontal mobile */}
-      {mobile ? (
-        <div style={{
-          position: 'absolute', bottom: 76, left: '6%',
-          animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
-          display: 'flex', flexDirection: 'column', gap: 8,
-        }}>
-          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, letterSpacing: '0.18em',
-            textTransform: 'uppercase', color: 'rgba(200,169,122,0.4)' }}>scroll</span>
-          <div style={{ width: 52, height: 1, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
-            <div style={{ width: '100%', height: 1, background: T.accent, animation: 'scrollLineH 2s ease-in-out infinite' }}/>
-          </div>
-        </div>
-      ) : (
-        <div style={{
-          position: 'absolute', bottom: 40, left: 'calc(6% + 2px)',
-          animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
-        }}>
-          <div style={{ width: 1, height: 52, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
-            <div style={{ width: 1, height: '100%', background: T.accent, animation: 'scrollLine 2s ease-in-out infinite' }}/>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

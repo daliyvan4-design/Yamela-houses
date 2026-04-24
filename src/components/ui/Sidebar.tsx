@@ -68,19 +68,28 @@ export default function Sidebar({ page, setPage }: Props) {
     }}>
       <button
         onClick={() => setPage('hero')}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '20px 0 8px' }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '28px 0 28px' }}
         title="Yamela Homes"
       >
         <LogoMark size={40}/>
       </button>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', gap: 4 }}>
-        <NavItem icon={icons.grid} active={page === 'projects'} onClick={() => setPage('projects')} label="Projects"/>
-        <NavItem icon={icons.user} active={page === 'about'}    onClick={() => setPage('about')}    label="About"/>
-        <NavItem icon={icons.mail} active={page === 'contact'}  onClick={() => setPage('contact')}  label="Contact"/>
+      <div style={{ width: '60%', height: '0.5px', background: T.border }}/>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+        {[
+          { key: 'projects' as const, icon: icons.grid, label: 'Projects' },
+          { key: 'about'    as const, icon: icons.user, label: 'About' },
+          { key: 'contact'  as const, icon: icons.mail, label: 'Contact' },
+        ].map(({ key, icon, label }) => (
+          <div key={key} style={{ borderTop: `0.5px solid ${T.border}` }}>
+            <NavItem icon={icon} active={page === key} onClick={() => setPage(key)} label={label}/>
+          </div>
+        ))}
+        <div style={{ borderTop: `0.5px solid ${T.border}` }}/>
       </div>
 
-      <div style={{ width: 24, height: '0.5px', background: T.border, marginBottom: 20 }}/>
+      <div style={{ width: '60%', height: '0.5px', background: T.border, marginBottom: 24 }}/>
     </nav>
   );
 }

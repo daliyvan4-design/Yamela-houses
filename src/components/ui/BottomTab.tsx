@@ -41,7 +41,7 @@ export default function BottomTab({ page, setPage }: Props) {
     }}>
       {/* Logo — bouton home */}
       <button onClick={() => setPage('hero')} style={{
-        width: 64, flexShrink: 0,
+        width: 88, flexShrink: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: 'none', border: 'none', borderRight: `0.5px solid ${T.border}`,
         cursor: 'pointer', padding: 0,
