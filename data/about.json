@@ -1,0 +1,19 @@
+{
+  "image": "",
+  "stats": [
+    { "value": "12+", "label": "Ans" },
+    { "value": "48",  "label": "Projets" },
+    { "value": "7",   "label": "Prix" }
+  ],
+  "paragraphs": [
+    "Yamela Homes est un cabinet d'architecture fondé sur la conviction qu'une maison bien conçue transforme la façon dont on habite ses journées. Nous travaillons à l'intersection de la précision spatiale et de la chaleur des matériaux.",
+    "Chaque projet commence par une lecture lente et attentive du site — la qualité de la lumière, les vents dominants, les rythmes du paysage environnant. Les décisions émergent de cette écoute.",
+    "Nous collaborons étroitement avec nos clients tout au long du processus, traitant la conception comme une conversation, jamais comme une livraison."
+  ],
+  "services": [
+    "Maisons individuelles",
+    "Immeubles résidentiels",
+    "Design intérieur",
+    "Conseil & rénovation"
+  ]
+}
