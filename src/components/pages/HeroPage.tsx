@@ -54,7 +54,7 @@ export default function HeroPage({ setPage }: Props) {
         }}>
           <div style={{ width: 32, height: '0.5px', background: T.accent }}/>
           <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.28em',
-            textTransform: 'uppercase', color: T.accent }}>Architecture & Design</span>
+            textTransform: 'uppercase', color: T.accent }}>Yamela, the Design Project</span>
         </div>
 
         <h1 style={{

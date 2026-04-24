@@ -20,6 +20,8 @@ export interface ContactRecord {
 
 export interface AboutRecord {
   image: string;
+  heading_dark: string;
+  heading_accent: string;
   stats: { value: string; label: string }[];
   paragraphs: string[];
   services: string[];
@@ -86,19 +88,21 @@ export async function saveContact(data: ContactRecord): Promise<void> {
 /* ── About ── */
 export async function getAbout(): Promise<AboutRecord> {
   const sql = getSql();
-  const [row] = await sql`SELECT image, stats, paragraphs, services FROM about WHERE id = 1`;
-  return (row ?? { image: '', stats: [], paragraphs: [], services: [] }) as AboutRecord;
+  const [row] = await sql`SELECT image, heading_dark, heading_accent, stats, paragraphs, services FROM about WHERE id = 1`;
+  return (row ?? { image: '', heading_dark: '', heading_accent: '', stats: [], paragraphs: [], services: [] }) as AboutRecord;
 }
 
 export async function saveAbout(data: AboutRecord): Promise<void> {
   const sql = getSql();
   await sql`
-    INSERT INTO about (id, image, stats, paragraphs, services)
-    VALUES (1, ${data.image}, ${JSON.stringify(data.stats)}, ${JSON.stringify(data.paragraphs)}, ${JSON.stringify(data.services)})
+    INSERT INTO about (id, image, heading_dark, heading_accent, stats, paragraphs, services)
+    VALUES (1, ${data.image}, ${data.heading_dark}, ${data.heading_accent}, ${JSON.stringify(data.stats)}, ${JSON.stringify(data.paragraphs)}, ${JSON.stringify(data.services)})
     ON CONFLICT (id) DO UPDATE SET
-      image      = EXCLUDED.image,
-      stats      = EXCLUDED.stats,
-      paragraphs = EXCLUDED.paragraphs,
-      services   = EXCLUDED.services
+      image          = EXCLUDED.image,
+      heading_dark   = EXCLUDED.heading_dark,
+      heading_accent = EXCLUDED.heading_accent,
+      stats          = EXCLUDED.stats,
+      paragraphs     = EXCLUDED.paragraphs,
+      services       = EXCLUDED.services
   `;
 }

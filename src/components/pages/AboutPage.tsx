@@ -5,7 +5,8 @@ import { AboutRecord } from '@/lib/store';
 import ImgPlaceholder from '@/components/ui/ImgPlaceholder';
 
 const DEFAULT: AboutRecord = {
-  image: '', stats: [{ value: '—', label: 'Ans' }, { value: '—', label: 'Projets' }, { value: '—', label: 'Prix' }],
+  image: '', heading_dark: "L'architecture comme", heading_accent: 'acte de précision',
+  stats: [{ value: '—', label: 'Ans' }, { value: '—', label: 'Projets' }, { value: '—', label: 'Prix' }],
   paragraphs: [''], services: [],
 };
 
@@ -67,15 +68,14 @@ export default function AboutPage() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
           <div style={{ width: 28, height: '0.5px', background: T.accent }}/>
-          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
-            textTransform: 'uppercase', color: T.accent }}>Le cabinet</span>
+          <div style={{ width: 28, height: '0.5px', background: T.text }}/>
         </div>
 
         <h2 style={{
           fontFamily: 'var(--font-cormorant)', fontWeight: 300,
           fontSize: 'clamp(30px,3.2vw,48px)', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 32,
         }}>
-          L&apos;architecture comme<br/><em style={{ color: T.accent }}>acte de précision</em><br/>et de soin.
+          {data.heading_dark}<br/><em style={{ color: T.accent }}>{data.heading_accent}</em>
         </h2>
 
         <div style={{ width: '100%', height: '0.5px', background: T.border, marginBottom: 32 }}/>

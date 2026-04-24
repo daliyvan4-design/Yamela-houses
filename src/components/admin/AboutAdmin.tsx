@@ -7,10 +7,12 @@ import ImageUpload from './ImageUpload';
 const A = '#C8A97A';
 const BORDER = 'rgba(200,169,122,0.15)';
 
+const DEFAULTS: Partial<AboutRecord> = { heading_dark: "L'architecture comme", heading_accent: 'acte de précision' };
+
 interface Props { initial: AboutRecord; }
 
 export default function AboutAdmin({ initial }: Props) {
-  const [form, setForm] = useState<AboutRecord>(initial);
+  const [form, setForm] = useState<AboutRecord>({ ...DEFAULTS, ...initial });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
 
@@ -41,6 +43,18 @@ export default function AboutAdmin({ initial }: Props) {
     <div style={{ maxWidth: 680 }}>
       {msg && <div style={{ padding: '10px 16px', background: 'rgba(200,169,122,0.12)',
         border: `0.5px solid ${A}`, fontSize: 11, color: A, letterSpacing: '0.08em', marginBottom: 24 }}>{msg}</div>}
+
+      {/* Titre */}
+      <Section title="Titre de la page">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Field label="Ligne principale (blanc)" value={form.heading_dark}
+            onChange={e => setForm(f => ({ ...f, heading_dark: e.target.value }))}
+            placeholder="L'architecture comme"/>
+          <Field label="Ligne accent (dorée)" value={form.heading_accent}
+            onChange={e => setForm(f => ({ ...f, heading_accent: e.target.value }))}
+            placeholder="acte de précision"/>
+        </div>
+      </Section>
 
       {/* Photo */}
       <Section title="Photo">
