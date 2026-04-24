@@ -122,7 +122,7 @@ export default function ContactPage() {
           <div>
             <label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: T.muted, display: 'block', marginBottom: 10 }}>Type de projet</label>
-            <div style={{ display: 'flex', gap: 0, flexWrap: 'wrap', gap: '8px' } as React.CSSProperties}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {['Intérieur', 'Résidentiel', 'Bureaux', 'Commercial'].map(t => (
                 <button key={t} type="button" onClick={() => setForm(f => ({ ...f, type: t }))} style={{
                   padding: '7px 16px', background: 'none', cursor: 'pointer',
