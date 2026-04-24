@@ -1,13 +1,9 @@
 'use client';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
+import LogoMark from './LogoMark';
 
 const icons = {
-  home: (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="0.9">
-      <path d="M2 9L9 3l7 6"/><path d="M4 8v7h4v-4h2v4h4V8"/>
-    </svg>
-  ),
   grid: (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="0.9">
       <rect x="2" y="2" width="6" height="6"/><rect x="10" y="2" width="6" height="6"/>
@@ -28,11 +24,10 @@ const icons = {
   ),
 };
 
-const tabs: { key: Page; icon: React.ReactNode; label: string }[] = [
-  { key: 'hero',     icon: icons.home, label: 'Home' },
-  { key: 'projects', icon: icons.grid, label: 'Projects' },
-  { key: 'about',    icon: icons.user, label: 'About' },
-  { key: 'contact',  icon: icons.mail, label: 'Contact' },
+const tabs: { key: Page; label: string }[] = [
+  { key: 'projects', label: 'Projets' },
+  { key: 'about',    label: 'À propos' },
+  { key: 'contact',  label: 'Contact' },
 ];
 
 interface Props { page: Page; setPage: (p: Page) => void; }
@@ -40,18 +35,34 @@ interface Props { page: Page; setPage: (p: Page) => void; }
 export default function BottomTab({ page, setPage }: Props) {
   return (
     <nav style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, height: 56,
+      position: 'fixed', bottom: 0, left: 0, right: 0, height: 60,
       borderTop: `0.5px solid ${T.border}`, background: T.bg,
-      display: 'flex', zIndex: 100,
+      display: 'flex', alignItems: 'stretch', zIndex: 100,
     }}>
+      {/* Logo — bouton home */}
+      <button onClick={() => setPage('hero')} style={{
+        width: 64, flexShrink: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'none', border: 'none', borderRight: `0.5px solid ${T.border}`,
+        cursor: 'pointer', padding: 0,
+        opacity: page === 'hero' ? 1 : 0.55,
+        transition: 'opacity 0.2s',
+      }}>
+        <LogoMark size={26} color={T.text}/>
+      </button>
+
+      {/* Autres onglets */}
       {tabs.map(t => (
         <button key={t.key} onClick={() => setPage(t.key)} style={{
           flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-          justifyContent: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer',
+          justifyContent: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer',
           color: page === t.key ? T.text : T.muted,
-          fontSize: 9, fontFamily: 'var(--font-dm-sans)', letterSpacing: '0.06em', textTransform: 'uppercase',
+          fontSize: 9, fontFamily: 'var(--font-dm-sans)', letterSpacing: '0.08em', textTransform: 'uppercase',
+          borderLeft: `0.5px solid ${T.border}`,
+          borderBottom: page === t.key ? `1.5px solid ${T.accent}` : '1.5px solid transparent',
+          transition: 'color 0.2s',
         }}>
-          {t.icon}
+          {t.key === 'projects' ? icons.grid : t.key === 'about' ? icons.user : icons.mail}
           {t.label}
         </button>
       ))}

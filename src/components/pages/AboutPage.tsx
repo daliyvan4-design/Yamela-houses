@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { AboutRecord } from '@/lib/store';
+import { useIsMobile } from '@/lib/useIsMobile';
 import ImgPlaceholder from '@/components/ui/ImgPlaceholder';
 
 const DEFAULT: AboutRecord = {
@@ -13,19 +14,33 @@ const DEFAULT: AboutRecord = {
 export default function AboutPage() {
   const [data, setData] = useState<AboutRecord>(DEFAULT);
   const [projectCount, setProjectCount] = useState<number>(0);
+  const mobile = useIsMobile();
 
   useEffect(() => {
     fetch('/api/about').then(r => r.json()).then(setData);
     fetch('/api/projects').then(r => r.json()).then((p: unknown[]) => setProjectCount(p.length));
   }, []);
 
-  return (
-    <div className="page-enter" style={{ height: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
+  const stats = [
+    { value: data.stats[0]?.value ?? '—', label: data.stats[0]?.label ?? 'Ans' },
+    { value: String(projectCount), label: 'Projets' },
+  ];
 
-      {/* LEFT */}
+  return (
+    <div className="page-enter" style={{
+      height: '100%',
+      display: 'grid',
+      gridTemplateColumns: mobile ? '1fr' : '1fr 1fr',
+      gridTemplateRows: mobile ? 'auto 1fr' : '1fr',
+      overflow: mobile ? 'auto' : 'hidden',
+    }}>
+
+      {/* LEFT — image + stats */}
       <div style={{
         background: '#0D0D0D', position: 'relative', overflow: 'hidden',
-        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '52px 48px',
+        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+        padding: mobile ? '28px 24px' : '52px 48px',
+        minHeight: mobile ? 260 : undefined,
       }}>
         <div style={{
           position: 'absolute', top: '-4%', left: '-5%',
@@ -41,26 +56,25 @@ export default function AboutPage() {
           <rect x="48" y="200" width="8" height="8" fill="none" stroke={T.accent} strokeWidth="0.8" opacity="0.5"/>
         </svg>
 
-        <div style={{ position: 'relative', zIndex: 1, height: '52%', marginBottom: 32 }}>
-          {data.image
-            // eslint-disable-next-line @next/next/no-img-element
-            ? <img src={data.image} alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
-            : <ImgPlaceholder label="architecte / portrait" style={{ width: '100%', height: '100%' }}/>
-          }
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(13,13,13,0.25)' }}/>
-        </div>
+        {!mobile && (
+          <div style={{ position: 'relative', zIndex: 1, height: '52%', marginBottom: 32 }}>
+            {data.image
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={data.image} alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
+              : <ImgPlaceholder label="architecte / portrait" style={{ width: '100%', height: '100%' }}/>
+            }
+            <div style={{ position: 'absolute', inset: 0, background: 'rgba(13,13,13,0.25)' }}/>
+          </div>
+        )}
 
         <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          {[
-            { value: data.stats[0]?.value ?? '—', label: data.stats[0]?.label ?? 'Ans' },
-            { value: String(projectCount), label: 'Projets' },
-          ].map((s, i) => (
+          {stats.map((s, i) => (
             <div key={i} style={{
               paddingRight: 24,
               borderRight: i === 0 ? `0.5px solid rgba(200,169,122,0.2)` : 'none',
               paddingLeft: i > 0 ? 24 : 0,
             }}>
-              <p style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300, fontSize: 40, color: '#FAFAF8', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300, fontSize: mobile ? 32 : 40, color: '#FAFAF8', lineHeight: 1 }}>{s.value}</p>
               <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase',
                 color: T.accent, marginTop: 6 }}>{s.label}</p>
             </div>
@@ -68,10 +82,11 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* RIGHT */}
+      {/* RIGHT — texte */}
       <div style={{
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        padding: '60px 56px 60px 52px', overflowY: 'auto', background: T.bg,
+        display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
+        padding: mobile ? '32px 24px 40px' : '60px 56px 60px 52px',
+        overflowY: 'auto', background: T.bg,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
           <div style={{ width: 28, height: '0.5px', background: T.accent }}/>
@@ -80,7 +95,8 @@ export default function AboutPage() {
 
         <h2 style={{
           fontFamily: 'var(--font-cormorant)', fontWeight: 300,
-          fontSize: 'clamp(30px,3.2vw,48px)', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 32,
+          fontSize: mobile ? 'clamp(28px,7vw,40px)' : 'clamp(30px,3.2vw,48px)',
+          letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 32,
         }}>
           {data.heading_dark}<br/><em style={{ color: T.accent }}>{data.heading_accent}</em>
         </h2>

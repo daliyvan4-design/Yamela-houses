@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { ContactRecord } from '@/lib/store';
+import { useIsMobile } from '@/lib/useIsMobile';
 
 const DEFAULT: ContactRecord = { address: '', email: '', phone: '' };
 
@@ -11,6 +12,7 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [hovBtn, setHovBtn] = useState(false);
+  const mobile = useIsMobile();
 
   useEffect(() => { fetch('/api/contact').then(r => r.json()).then(setInfo); }, []);
 
@@ -38,12 +40,20 @@ export default function ContactPage() {
   );
 
   return (
-    <div className="page-enter" style={{ height: '100%', display: 'grid', gridTemplateColumns: '1fr 1.2fr', overflow: 'hidden' }}>
+    <div className="page-enter" style={{
+      height: '100%',
+      display: 'grid',
+      gridTemplateColumns: mobile ? '1fr' : '1fr 1.2fr',
+      gridTemplateRows: mobile ? 'auto 1fr' : '1fr',
+      overflow: mobile ? 'auto' : 'hidden',
+    }}>
 
-      {/* LEFT */}
+      {/* LEFT — infos */}
       <div style={{
         background: '#0D0D0D', position: 'relative', overflow: 'hidden',
-        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '52px 48px',
+        display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'center' : 'flex-end',
+        padding: mobile ? '36px 24px' : '52px 48px',
+        minHeight: mobile ? 'auto' : undefined,
       }}>
         <div style={{
           position: 'absolute', bottom: '-10%', right: '-10%',
@@ -58,43 +68,44 @@ export default function ContactPage() {
           <line x1="600" y1="0" x2="0" y2="900" stroke={T.accent} strokeWidth="0.4" opacity="0.15"/>
         </svg>
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 48 }}>
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: mobile ? 24 : 48 }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
               <div style={{ width: 28, height: '0.5px', background: T.accent }}/>
               <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
                 textTransform: 'uppercase', color: T.accent }}>Contact</span>
             </div>
             <h2 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300,
-              fontSize: 'clamp(32px,3.5vw,52px)', color: '#FAFAF8', lineHeight: 1.1, letterSpacing: '0.02em' }}>
+              fontSize: mobile ? 'clamp(28px,7vw,40px)' : 'clamp(32px,3.5vw,52px)',
+              color: '#FAFAF8', lineHeight: 1.1, letterSpacing: '0.02em' }}>
               Parlons de<br/><em style={{ color: T.accent }}>votre projet.</em>
             </h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            {[
-              ['Adresse', info.address],
-              ['Email',   info.email],
-              ['Tél.',    info.phone],
-            ].filter(([, v]) => v).map(([label, val]) => (
-              <div key={label}>
-                <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
-                  textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{label}</p>
-                <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 12,
-                  color: 'rgba(250,250,248,0.55)', letterSpacing: '0.03em' }}>{val}</p>
-              </div>
-            ))}
-          </div>
+          {!mobile && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {[['Adresse', info.address], ['Email', info.email], ['Tél.', info.phone]]
+                .filter(([, v]) => v).map(([label, val]) => (
+                <div key={label}>
+                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
+                    textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{label}</p>
+                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 12,
+                    color: 'rgba(250,250,248,0.55)', letterSpacing: '0.03em' }}>{val}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* RIGHT */}
+      {/* RIGHT — formulaire */}
       <div style={{
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        padding: '60px 56px', overflowY: 'auto', background: T.bg,
+        display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
+        padding: mobile ? '32px 24px 40px' : '60px 56px',
+        overflowY: 'auto', background: T.bg,
       }}>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.2em',
-          textTransform: 'uppercase', color: T.muted, marginBottom: 32 }}>Formulaire de contact</p>
+          textTransform: 'uppercase', color: T.muted, marginBottom: 28 }}>Formulaire de contact</p>
 
         <form onSubmit={async e => {
           e.preventDefault();
@@ -106,18 +117,18 @@ export default function ContactPage() {
           });
           setSending(false);
           setSent(true);
-        }} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        }} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
           <div>
             <label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: T.muted, display: 'block', marginBottom: 10 }}>Type de projet</label>
-            <div style={{ display: 'flex', gap: 0 }}>
+            <div style={{ display: 'flex', gap: 0, flexWrap: 'wrap', gap: '8px' } as React.CSSProperties}>
               {['Intérieur', 'Résidentiel', 'Bureaux', 'Commercial'].map(t => (
                 <button key={t} type="button" onClick={() => setForm(f => ({ ...f, type: t }))} style={{
-                  padding: '7px 20px', background: 'none', cursor: 'pointer',
+                  padding: '7px 16px', background: 'none', cursor: 'pointer',
                   border: `0.5px solid ${form.type === t ? T.accent : T.border}`,
-                  marginRight: 8,
                   color: form.type === t ? T.accent : T.muted,
-                  fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.12em',
+                  fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.1em',
                   textTransform: 'uppercase', transition: 'all 0.2s',
                 }}>{t}</button>
               ))}
@@ -151,13 +162,12 @@ export default function ContactPage() {
               onBlur={e => (e.target as HTMLTextAreaElement).style.borderBottomColor = T.border}/>
           </div>
 
-          <button type="submit"
+          <button type="submit" disabled={sending}
             onMouseEnter={() => setHovBtn(true)}
             onMouseLeave={() => setHovBtn(false)}
-            disabled={sending}
             style={{
               padding: '14px 44px', alignSelf: 'flex-start', cursor: sending ? 'default' : 'pointer',
-              border: `0.5px solid ${hovBtn ? T.accent : T.text}`,
+              border: `0.5px solid ${hovBtn && !sending ? T.accent : T.text}`,
               background: hovBtn && !sending ? T.accent : 'transparent',
               color: hovBtn && !sending ? '#0D0D0D' : T.text,
               fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',

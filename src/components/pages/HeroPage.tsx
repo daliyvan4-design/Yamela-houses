@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
+import { useIsMobile } from '@/lib/useIsMobile';
 import BlueprintSVG from '@/components/ui/BlueprintSVG';
 
 interface Props { setPage: (p: Page) => void; }
@@ -11,6 +12,7 @@ export default function HeroPage({ setPage }: Props) {
   const rafRef = useRef<number>(null);
   const targetRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
+  const mobile = useIsMobile();
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -43,13 +45,16 @@ export default function HeroPage({ setPage }: Props) {
 
       {/* Text — counter-parallax */}
       <div style={{
-        position: 'absolute', left: '6%', bottom: '11%',
+        position: 'absolute',
+        left: mobile ? '6%' : '6%',
+        bottom: mobile ? '10%' : '11%',
+        right: mobile ? '6%' : 'auto',
         display: 'flex', flexDirection: 'column',
-        transform: `translate(${px * -10}px, ${py * -8}px)`,
+        transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,
         transition: 'transform 0.1s linear',
       }}>
         <div style={{
-          display: 'flex', alignItems: 'center', marginBottom: 24,
+          display: 'flex', alignItems: 'center', marginBottom: mobile ? 16 : 24,
           animation: 'fadeUp 0.8s ease both', animationDelay: '0.8s', opacity: 0,
         }}>
           <div style={{ width: 32, height: '0.5px', background: T.accent }}/>
@@ -57,7 +62,8 @@ export default function HeroPage({ setPage }: Props) {
 
         <h1 style={{
           fontFamily: 'var(--font-cormorant)', fontWeight: 300,
-          fontSize: 'clamp(52px,7vw,96px)', lineHeight: 0.95, letterSpacing: '-0.01em',
+          fontSize: mobile ? 'clamp(38px,11vw,64px)' : 'clamp(52px,7vw,96px)',
+          lineHeight: 0.95, letterSpacing: '-0.01em',
           color: '#FAFAF8',
           animation: 'fadeUp 1s cubic-bezier(0.22,1,0.36,1) both', animationDelay: '1s', opacity: 0,
         }}>
@@ -65,7 +71,7 @@ export default function HeroPage({ setPage }: Props) {
         </h1>
 
         <div style={{
-          display: 'flex', flexDirection: 'column', gap: 20, marginTop: 40,
+          display: 'flex', flexDirection: 'column', gap: mobile ? 14 : 20, marginTop: mobile ? 24 : 40,
           animation: 'fadeUp 0.8s ease both', animationDelay: '1.3s', opacity: 0,
         }}>
           <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 12, color: 'rgba(250,250,248,0.38)',
@@ -80,7 +86,8 @@ export default function HeroPage({ setPage }: Props) {
             onClick={() => setPage('projects')}
             style={{
               alignSelf: 'flex-start',
-              padding: '13px 36px', border: `0.5px solid ${T.accent}`,
+              padding: mobile ? '11px 28px' : '13px 36px',
+              border: `0.5px solid ${T.accent}`,
               background: 'transparent', color: T.accent,
               fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
               textTransform: 'uppercase', cursor: 'pointer', transition: 'background 0.35s, color 0.35s',
