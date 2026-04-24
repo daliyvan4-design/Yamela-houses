@@ -58,7 +58,7 @@ export default function BottomTab({ page, setPage }: Props) {
         transition: 'opacity 0.2s',
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '60px', height: '60px', display: 'block' }}/>
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '70px', height: '70px', display: 'block' }}/>
       </button>
 
       {/* Autres onglets */}
