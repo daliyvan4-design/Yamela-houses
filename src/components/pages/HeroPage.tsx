@@ -45,7 +45,7 @@ export default function HeroPage({ setPage }: Props) {
       <div style={{
         position: 'absolute',
         left: '6%',
-        bottom: mobile ? 96 : '11%',
+        bottom: mobile ? 116 : '11%',
         maxWidth: mobile ? '82%' : '60%',
         display: 'flex', flexDirection: 'column',
         transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,

@@ -4,5 +4,5 @@ export const T = {
   muted:   '#888888',
   accent:  '#C8A97A',
   border:  '#E0E0E0',
-  sidebar: 130,
+  sidebar: 170,
 } as const;
