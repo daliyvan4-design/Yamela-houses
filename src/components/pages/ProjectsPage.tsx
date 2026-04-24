@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { catLabels, Category } from '@/lib/data';
 import { ProjectRecord } from '@/lib/store';
+import { getCachedProjects } from '@/lib/apiCache';
 import { useIsMobile } from '@/lib/useIsMobile';
 import ProjectCard from '@/components/projects/ProjectCard';
 import ProjectExpand from '@/components/projects/ProjectExpand';
@@ -10,12 +11,12 @@ import ProjectExpand from '@/components/projects/ProjectExpand';
 export default function ProjectsPage() {
   const [cat, setCat] = useState<Category>('residentiel');
   const [expanded, setExpanded] = useState<ProjectRecord | null>(null);
-  const [all, setAll] = useState<ProjectRecord[]>([]);
+  const [all, setAll] = useState<ProjectRecord[]>(() => getCachedProjects() ?? []);
   const mobile = useIsMobile();
 
   useEffect(() => {
-    fetch('/api/projects').then(r => r.json()).then(setAll);
-  }, []);
+    if (all.length === 0) fetch('/api/projects').then(r => r.json()).then(setAll);
+  }, [all.length]);
 
   const projects = all.filter(p => p.category === cat);
 

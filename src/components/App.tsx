@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
+import { prefetchAll } from '@/lib/apiCache';
 import Sidebar from '@/components/ui/Sidebar';
 import BottomTab from '@/components/ui/BottomTab';
 import HeroPage from '@/components/pages/HeroPage';
@@ -18,11 +19,13 @@ const pages: Record<Page, React.ComponentType<{ setPage: (p: Page) => void }>> =
 
 export default function App() {
   const [page, setPage] = useState<Page>('hero');
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
 
   useEffect(() => {
+    prefetchAll();
     const check = () => setMobile(window.innerWidth < 768);
-    check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);

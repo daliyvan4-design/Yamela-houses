@@ -22,7 +22,6 @@ export default function HeroPage({ setPage }: Props) {
       };
     };
     window.addEventListener('mousemove', onMove);
-
     const tick = () => {
       const t = currentRef.current, g = targetRef.current;
       currentRef.current = { x: t.x + (g.x - t.x) * 0.06, y: t.y + (g.y - t.y) * 0.06 };
@@ -30,7 +29,6 @@ export default function HeroPage({ setPage }: Props) {
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
-
     return () => {
       window.removeEventListener('mousemove', onMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -40,18 +38,19 @@ export default function HeroPage({ setPage }: Props) {
   const px = mouse.x, py = mouse.y;
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#0D0D0D' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0D0D0D', overflow: 'clip' }}>
       <BlueprintSVG px={px} py={py}/>
 
-      {/* Text — counter-parallax */}
+      {/* Text */}
       <div style={{
         position: 'absolute',
         left: '6%',
         bottom: mobile ? 84 : '11%',
-        maxWidth: mobile ? '88%' : 'none',
+        maxWidth: mobile ? '80%' : '60%',
         display: 'flex', flexDirection: 'column',
         transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,
         transition: 'transform 0.1s linear',
+        zIndex: 2,
       }}>
         <div style={{
           display: 'flex', alignItems: 'center', marginBottom: mobile ? 16 : 24,
@@ -63,8 +62,7 @@ export default function HeroPage({ setPage }: Props) {
         <h1 style={{
           fontFamily: 'var(--font-cormorant)', fontWeight: 300,
           fontSize: mobile ? 'clamp(38px,11vw,64px)' : 'clamp(52px,7vw,96px)',
-          lineHeight: 0.95, letterSpacing: '-0.01em',
-          color: '#FAFAF8',
+          lineHeight: 0.95, letterSpacing: '-0.01em', color: '#FAFAF8',
           animation: 'fadeUp 1s cubic-bezier(0.22,1,0.36,1) both', animationDelay: '1s', opacity: 0,
         }}>
           Yamela,<br/><em style={{ color: T.accent }}>the Design</em><br/>Project.
@@ -91,6 +89,7 @@ export default function HeroPage({ setPage }: Props) {
               background: 'transparent', color: T.accent,
               fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
               textTransform: 'uppercase', cursor: 'pointer', transition: 'background 0.35s, color 0.35s',
+              whiteSpace: 'nowrap',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = T.accent; (e.currentTarget as HTMLButtonElement).style.color = '#0D0D0D'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = T.accent; }}
@@ -100,21 +99,29 @@ export default function HeroPage({ setPage }: Props) {
         </div>
       </div>
 
-      {/* Scroll / swipe indicator */}
-      <div style={{
-        position: 'absolute',
-        bottom: mobile ? 76 : 40,
-        right: mobile ? 24 : 'auto',
-        left: mobile ? 'auto' : 'calc(6% + 2px)',
-        animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-      }}>
-        {mobile && <span style={{ fontSize: 8, letterSpacing: '0.18em', textTransform: 'uppercase',
-          color: 'rgba(200,169,122,0.4)', writingMode: 'vertical-rl' }}>scroll</span>}
-        <div style={{ width: 1, height: 52, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
-          <div style={{ width: 1, height: '100%', background: T.accent, animation: 'scrollLine 2s ease-in-out infinite' }}/>
+      {/* Indicateur — vertical desktop, horizontal mobile */}
+      {mobile ? (
+        <div style={{
+          position: 'absolute', bottom: 76, left: '6%',
+          animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
+          display: 'flex', flexDirection: 'column', gap: 8,
+        }}>
+          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, letterSpacing: '0.18em',
+            textTransform: 'uppercase', color: 'rgba(200,169,122,0.4)' }}>scroll</span>
+          <div style={{ width: 52, height: 1, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: 1, background: T.accent, animation: 'scrollLineH 2s ease-in-out infinite' }}/>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div style={{
+          position: 'absolute', bottom: 40, left: 'calc(6% + 2px)',
+          animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
+        }}>
+          <div style={{ width: 1, height: 52, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
+            <div style={{ width: 1, height: '100%', background: T.accent, animation: 'scrollLine 2s ease-in-out infinite' }}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { AboutRecord } from '@/lib/store';
+import { getCachedAbout, getCachedProjects } from '@/lib/apiCache';
 import { useIsMobile } from '@/lib/useIsMobile';
 import ImgPlaceholder from '@/components/ui/ImgPlaceholder';
 
@@ -12,13 +13,13 @@ const DEFAULT: AboutRecord = {
 };
 
 export default function AboutPage() {
-  const [data, setData] = useState<AboutRecord>(DEFAULT);
-  const [projectCount, setProjectCount] = useState<number>(0);
+  const [data, setData] = useState<AboutRecord>(() => getCachedAbout() ?? DEFAULT);
+  const [projectCount, setProjectCount] = useState<number>(() => getCachedProjects()?.length ?? 0);
   const mobile = useIsMobile();
 
   useEffect(() => {
-    fetch('/api/about').then(r => r.json()).then(setData);
-    fetch('/api/projects').then(r => r.json()).then((p: unknown[]) => setProjectCount(p.length));
+    if (data === DEFAULT) fetch('/api/about').then(r => r.json()).then(setData);
+    if (projectCount === 0) fetch('/api/projects').then(r => r.json()).then((p: unknown[]) => setProjectCount(p.length));
   }, []);
 
   const stats = [

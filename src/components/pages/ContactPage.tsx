@@ -2,19 +2,22 @@
 import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { ContactRecord } from '@/lib/store';
+import { getCachedContact } from '@/lib/apiCache';
 import { useIsMobile } from '@/lib/useIsMobile';
 
 const DEFAULT: ContactRecord = { address: '', email: '', phone: '' };
 
 export default function ContactPage() {
-  const [info, setInfo] = useState<ContactRecord>(DEFAULT);
+  const [info, setInfo] = useState<ContactRecord>(() => getCachedContact() ?? DEFAULT);
   const [form, setForm] = useState({ name: '', email: '', message: '', type: 'Résidentiel' });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [hovBtn, setHovBtn] = useState(false);
   const mobile = useIsMobile();
 
-  useEffect(() => { fetch('/api/contact').then(r => r.json()).then(setInfo); }, []);
+  useEffect(() => {
+    if (info === DEFAULT) fetch('/api/contact').then(r => r.json()).then(setInfo);
+  }, []);
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '13px 0', background: 'transparent',
