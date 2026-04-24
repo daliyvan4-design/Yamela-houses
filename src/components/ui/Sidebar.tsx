@@ -76,7 +76,7 @@ export default function Sidebar({ page, setPage }: Props) {
         title="Yamela Homes"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '120px', height: '120px', display: 'block' }}/>
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '130px', height: '130px', display: 'block' }}/>
       </button>
 
       <div style={{ width: '60%', height: '0.5px', background: T.border }}/>
