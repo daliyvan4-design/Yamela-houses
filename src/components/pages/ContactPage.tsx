@@ -9,6 +9,7 @@ export default function ContactPage() {
   const [info, setInfo] = useState<ContactRecord>(DEFAULT);
   const [form, setForm] = useState({ name: '', email: '', message: '', type: 'Résidentiel' });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [hovBtn, setHovBtn] = useState(false);
 
   useEffect(() => { fetch('/api/contact').then(r => r.json()).then(setInfo); }, []);
@@ -95,7 +96,17 @@ export default function ContactPage() {
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.2em',
           textTransform: 'uppercase', color: T.muted, marginBottom: 32 }}>Formulaire de contact</p>
 
-        <form onSubmit={e => { e.preventDefault(); setSent(true); }} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        <form onSubmit={async e => {
+          e.preventDefault();
+          setSending(true);
+          await fetch('https://formspree.io/f/mlgazbbn', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ name: form.name, email: form.email, message: form.message, type: form.type }),
+          });
+          setSending(false);
+          setSent(true);
+        }} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
           <div>
             <label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: T.muted, display: 'block', marginBottom: 10 }}>Type de projet</label>
@@ -143,15 +154,16 @@ export default function ContactPage() {
           <button type="submit"
             onMouseEnter={() => setHovBtn(true)}
             onMouseLeave={() => setHovBtn(false)}
+            disabled={sending}
             style={{
-              padding: '14px 44px', alignSelf: 'flex-start', cursor: 'pointer',
+              padding: '14px 44px', alignSelf: 'flex-start', cursor: sending ? 'default' : 'pointer',
               border: `0.5px solid ${hovBtn ? T.accent : T.text}`,
-              background: hovBtn ? T.accent : 'transparent',
-              color: hovBtn ? '#0D0D0D' : T.text,
+              background: hovBtn && !sending ? T.accent : 'transparent',
+              color: hovBtn && !sending ? '#0D0D0D' : T.text,
               fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.22em',
               textTransform: 'uppercase', transition: 'all 0.3s',
             }}>
-            Envoyer
+            {sending ? 'Envoi…' : 'Envoyer'}
           </button>
         </form>
       </div>
