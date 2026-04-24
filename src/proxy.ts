@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac } from 'crypto';
 
 const COOKIE = 'ya_session';
 const SECRET = process.env.AUTH_SECRET ?? 'dev-secret';
 const PASSWORD = process.env.ADMIN_PASSWORD ?? 'admin';
 
-function makeToken(password: string): string {
-  return createHmac('sha256', SECRET).update(password).digest('hex');
+async function makeToken(password: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(password));
+  return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (!pathname.startsWith('/admin') || pathname === '/admin/login') {
@@ -17,7 +21,7 @@ export function proxy(req: NextRequest) {
   }
 
   const token = req.cookies.get(COOKIE)?.value;
-  const expected = makeToken(PASSWORD);
+  const expected = await makeToken(PASSWORD);
 
   if (token !== expected) {
     const url = req.nextUrl.clone();
