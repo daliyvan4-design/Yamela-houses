@@ -35,7 +35,7 @@ interface Props { page: Page; setPage: (p: Page) => void; }
 export default function BottomTab({ page, setPage }: Props) {
   return (
     <nav style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, height: 60,
+      position: 'fixed', bottom: 0, left: 0, right: 0, height: 76,
       borderTop: `0.5px solid ${T.border}`, background: T.bg,
       display: 'flex', alignItems: 'stretch', zIndex: 100,
     }}>
@@ -48,7 +48,7 @@ export default function BottomTab({ page, setPage }: Props) {
         opacity: page === 'hero' ? 1 : 0.55,
         transition: 'opacity 0.2s',
       }}>
-        <Image src="/yamelogo.png" alt="Yamela" width={96} height={56} style={{ objectFit: 'contain' }} priority/>
+        <Image src="/yamelogo.png" alt="Yamela" width={3600} height={3600} style={{ objectFit: 'contain', width: '56px', height: '56px' }} priority/>
       </button>
 
       {/* Autres onglets */}

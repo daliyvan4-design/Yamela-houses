@@ -71,7 +71,7 @@ export default function Sidebar({ page, setPage }: Props) {
         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '28px 0 28px' }}
         title="Yamela Homes"
       >
-        <Image src="/yamelogo.png" alt="Yamela" width={104} height={72} style={{ objectFit: 'contain' }} priority/>
+        <Image src="/yamelogo.png" alt="Yamela" width={3600} height={3600} style={{ objectFit: 'contain', width: '110px', height: '110px' }} priority/>
       </button>
 
       <div style={{ width: '60%', height: '0.5px', background: T.border }}/>
