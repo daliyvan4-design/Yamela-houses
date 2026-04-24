@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
+import { getCachedLogoUrl } from '@/lib/apiCache';
 
 const icons = {
   grid: (
@@ -21,11 +22,6 @@ const icons = {
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="0.9">
       <rect x="2" y="4" width="14" height="10" rx="0.5"/>
       <path d="M2 5l7 5.5L16 5"/>
-    </svg>
-  ),
-  home: (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="0.9">
-      <path d="M2 9L9 3l7 6"/><path d="M4 8v7h4v-4h2v4h4V8"/>
     </svg>
   ),
 };
@@ -59,6 +55,14 @@ function NavItem({ icon, active, onClick, label }: { icon: React.ReactNode; acti
 interface Props { page: Page; setPage: (p: Page) => void; }
 
 export default function Sidebar({ page, setPage }: Props) {
+  const [logoSrc, setLogoSrc] = useState<string>('/yamelogo.png');
+
+  useEffect(() => {
+    const cached = getCachedLogoUrl();
+    if (cached) { setLogoSrc(cached); return; }
+    fetch('/api/logo').then(r => r.json()).then(d => { if (d.active_url) setLogoSrc(d.active_url); });
+  }, []);
+
   return (
     <nav style={{
       position: 'fixed', left: 0, top: 0, bottom: 0, width: T.sidebar,
@@ -68,10 +72,11 @@ export default function Sidebar({ page, setPage }: Props) {
     }}>
       <button
         onClick={() => setPage('hero')}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '28px 0 28px' }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '20px 0' }}
         title="Yamela Homes"
       >
-        <Image src="/yamelogo.png" alt="Yamela" width={3600} height={3600} style={{ objectFit: 'contain', width: '155px', height: '155px' }} priority/>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '86px', height: '86px', display: 'block' }}/>
       </button>
 
       <div style={{ width: '60%', height: '0.5px', background: T.border }}/>

@@ -13,6 +13,7 @@ const nav = [
   { href: '/admin/projects', label: 'Projets',      icon: '⊞' },
   { href: '/admin/about',    label: 'À propos',     icon: '◉' },
   { href: '/admin/contact',  label: 'Contact',      icon: '◎' },
+  { href: '/admin/logo',     label: 'Logos',        icon: '◐' },
 ];
 
 interface Props { children: React.ReactNode; title: string; }

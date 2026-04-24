@@ -41,9 +41,9 @@ export default function App() {
         key={page}
         style={{
           marginLeft: offset,
-          marginBottom: mobile ? 96 : 0,
+          marginBottom: mobile ? 60 : 0,
           flex: 1,
-          height: mobile ? 'calc(100vh - 96px)' : '100vh',
+          height: mobile ? 'calc(100vh - 60px)' : '100vh',
           overflow: 'hidden',
         }}
       >

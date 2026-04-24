@@ -1,7 +1,8 @@
 'use client';
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
+import { getCachedLogoUrl } from '@/lib/apiCache';
 
 const icons = {
   grid: (
@@ -33,9 +34,17 @@ const tabs: { key: Page; label: string }[] = [
 interface Props { page: Page; setPage: (p: Page) => void; }
 
 export default function BottomTab({ page, setPage }: Props) {
+  const [logoSrc, setLogoSrc] = useState<string>('/yamelogo.png');
+
+  useEffect(() => {
+    const cached = getCachedLogoUrl();
+    if (cached) { setLogoSrc(cached); return; }
+    fetch('/api/logo').then(r => r.json()).then(d => { if (d.active_url) setLogoSrc(d.active_url); });
+  }, []);
+
   return (
     <nav style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, height: 96,
+      position: 'fixed', bottom: 0, left: 0, right: 0, height: 60,
       borderTop: `0.5px solid ${T.border}`, background: T.bg,
       display: 'flex', alignItems: 'stretch', zIndex: 100,
     }}>
@@ -48,7 +57,8 @@ export default function BottomTab({ page, setPage }: Props) {
         opacity: page === 'hero' ? 1 : 0.55,
         transition: 'opacity 0.2s',
       }}>
-        <Image src="/yamelogo.png" alt="Yamela" width={3600} height={3600} style={{ objectFit: 'contain', width: '80px', height: '80px' }} priority/>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '50px', height: '50px', display: 'block' }}/>
       </button>
 
       {/* Autres onglets */}
