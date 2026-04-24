@@ -18,6 +18,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Yamela Homes — Architecture & Design',
   description: 'Boutique architecture practice. Marrakech · Casablanca · Rabat.',
+  icons: { icon: '/yamelogo.png', apple: '/yamelogo.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
