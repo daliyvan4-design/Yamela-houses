@@ -2,6 +2,8 @@ import AdminShell from '@/components/admin/AdminShell';
 import { getContact } from '@/lib/store';
 import ContactAdmin from '@/components/admin/ContactAdmin';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminContact() {
   const initial = await getContact();
   return (

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAbout, saveAbout, AboutRecord } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const about = await getAbout();
   return NextResponse.json(about);

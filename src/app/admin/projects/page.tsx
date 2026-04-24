@@ -2,6 +2,8 @@ import AdminShell from '@/components/admin/AdminShell';
 import { getProjects } from '@/lib/store';
 import ProjectsAdmin from '@/components/admin/ProjectsAdmin';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminProjects() {
   const initial = await getProjects();
   return (

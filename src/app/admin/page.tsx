@@ -2,6 +2,8 @@ import AdminShell from '@/components/admin/AdminShell';
 import DashboardCard from '@/components/admin/DashboardCard';
 import { getProjects } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 const BORDER = 'rgba(200,169,122,0.15)';
 const A = '#C8A97A';
 

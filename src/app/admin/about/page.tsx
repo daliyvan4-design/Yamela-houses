@@ -2,6 +2,8 @@ import AdminShell from '@/components/admin/AdminShell';
 import { getAbout } from '@/lib/store';
 import AboutAdmin from '@/components/admin/AboutAdmin';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminAbout() {
   const initial = await getAbout();
   return (
