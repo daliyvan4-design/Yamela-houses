@@ -7,7 +7,7 @@ import ProjectCard from '@/components/projects/ProjectCard';
 import ProjectExpand from '@/components/projects/ProjectExpand';
 
 export default function ProjectsPage() {
-  const [cat, setCat] = useState<Category>('interieur');
+  const [cat, setCat] = useState<Category>('residentiel');
   const [expanded, setExpanded] = useState<ProjectRecord | null>(null);
   const [all, setAll] = useState<ProjectRecord[]>([]);
 

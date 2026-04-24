@@ -7,18 +7,19 @@ import ImageUpload from './ImageUpload';
 const A = '#C8A97A';
 const BORDER = 'rgba(200,169,122,0.15)';
 const CAT_OPTIONS = [
-  { value: 'interieur', label: 'Intérieur' },
-  { value: 'immeuble',  label: 'Immeuble' },
-  { value: 'maison',    label: 'Maison' },
+  { value: 'interieur',   label: 'Intérieur' },
+  { value: 'residentiel', label: 'Résidentiel' },
+  { value: 'bureaux',     label: 'Bureaux' },
+  { value: 'commercial',  label: 'Commercial' },
 ];
 
 const EMPTY: Omit<ProjectRecord, 'id'> = {
   name: '', location: '', year: '', tags: '',
-  category: 'interieur', description: '', image: '',
+  category: 'residentiel', description: '', image: '',
 };
 
 type FormData = Omit<ProjectRecord, 'id'>;
-type Filter = 'all' | 'interieur' | 'immeuble' | 'maison';
+type Filter = 'all' | 'interieur' | 'residentiel' | 'bureaux' | 'commercial';
 
 interface Props { initial: ProjectRecord[]; }
 
@@ -73,7 +74,7 @@ export default function ProjectsAdmin({ initial }: Props) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, gap: 16 }}>
         <div style={{ display: 'flex', gap: 0, borderBottom: `0.5px solid ${BORDER}` }}>
-          {(['all', 'interieur', 'immeuble', 'maison'] as Filter[]).map(f => (
+          {(['all', 'interieur', 'residentiel', 'bureaux', 'commercial'] as Filter[]).map(f => (
             <button key={f} onClick={() => setFilter(f)} style={{
               padding: '7px 20px', background: 'none', border: 'none', cursor: 'pointer',
               color: filter === f ? A : 'rgba(250,250,248,0.35)',
@@ -81,7 +82,7 @@ export default function ProjectsAdmin({ initial }: Props) {
               borderBottom: filter === f ? `1.5px solid ${A}` : '1.5px solid transparent',
               marginBottom: '-0.5px', transition: 'color 0.2s',
             }}>
-              {f === 'all' ? 'Tous' : f === 'interieur' ? 'Intérieur' : f.charAt(0).toUpperCase() + f.slice(1)}
+              {f === 'all' ? 'Tous' : CAT_OPTIONS.find(o => o.value === f)?.label ?? f}
             </button>
           ))}
         </div>
