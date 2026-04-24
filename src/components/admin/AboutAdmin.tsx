@@ -64,13 +64,11 @@ export default function AboutAdmin({ initial }: Props) {
 
       {/* Stats */}
       <Section title="Statistiques">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-          {form.stats.map((s, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <Field label="Chiffre" value={s.value} onChange={e => setStat(i, 'value', e.target.value)} placeholder="12+"/>
-              <Field label="Label"  value={s.label} onChange={e => setStat(i, 'label', e.target.value)} placeholder="Ans"/>
-            </div>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Field label="Années d'expérience" value={form.stats[0]?.value ?? ''} onChange={e => setStat(0, 'value', e.target.value)} placeholder="12+"/>
+          <p style={{ fontSize: 10, color: 'rgba(250,250,248,0.25)', letterSpacing: '0.08em' }}>
+            Le nombre de projets est calculé automatiquement.
+          </p>
         </div>
       </Section>
 

@@ -6,14 +6,18 @@ import ImgPlaceholder from '@/components/ui/ImgPlaceholder';
 
 const DEFAULT: AboutRecord = {
   image: '', heading_dark: "L'architecture comme", heading_accent: 'acte de précision',
-  stats: [{ value: '—', label: 'Ans' }, { value: '—', label: 'Projets' }, { value: '—', label: 'Prix' }],
+  stats: [{ value: '—', label: 'Ans' }],
   paragraphs: [''], services: [],
 };
 
 export default function AboutPage() {
   const [data, setData] = useState<AboutRecord>(DEFAULT);
+  const [projectCount, setProjectCount] = useState<number>(0);
 
-  useEffect(() => { fetch('/api/about').then(r => r.json()).then(setData); }, []);
+  useEffect(() => {
+    fetch('/api/about').then(r => r.json()).then(setData);
+    fetch('/api/projects').then(r => r.json()).then((p: unknown[]) => setProjectCount(p.length));
+  }, []);
 
   return (
     <div className="page-enter" style={{ height: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
@@ -46,11 +50,14 @@ export default function AboutPage() {
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(13,13,13,0.25)' }}/>
         </div>
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-          {data.stats.map((s, i) => (
+        <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+          {[
+            { value: data.stats[0]?.value ?? '—', label: data.stats[0]?.label ?? 'Ans' },
+            { value: String(projectCount), label: 'Projets' },
+          ].map((s, i) => (
             <div key={i} style={{
               paddingRight: 24,
-              borderRight: i < data.stats.length - 1 ? `0.5px solid rgba(200,169,122,0.2)` : 'none',
+              borderRight: i === 0 ? `0.5px solid rgba(200,169,122,0.2)` : 'none',
               paddingLeft: i > 0 ? 24 : 0,
             }}>
               <p style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300, fontSize: 40, color: '#FAFAF8', lineHeight: 1 }}>{s.value}</p>
