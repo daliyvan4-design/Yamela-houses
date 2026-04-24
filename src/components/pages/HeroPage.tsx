@@ -46,8 +46,8 @@ export default function HeroPage({ setPage }: Props) {
       {/* Text — counter-parallax */}
       <div style={{
         position: 'absolute',
-        left: mobile ? '6%' : '6%',
-        bottom: mobile ? '10%' : '11%',
+        left: '6%',
+        bottom: mobile ? 84 : '11%',
         right: mobile ? '6%' : 'auto',
         display: 'flex', flexDirection: 'column',
         transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,
@@ -100,15 +100,15 @@ export default function HeroPage({ setPage }: Props) {
         </div>
       </div>
 
-      {/* Scroll line */}
-      <div style={{
+      {/* Scroll line — desktop only */}
+      {!mobile && <div style={{
         position: 'absolute', bottom: 40, left: 'calc(6% + 2px)',
         animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
       }}>
         <div style={{ width: 1, height: 52, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
           <div style={{ width: 1, height: '100%', background: T.accent, animation: 'scrollLine 2s ease-in-out infinite' }}/>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

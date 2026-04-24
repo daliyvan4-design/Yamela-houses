@@ -21,7 +21,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="page-enter" style={{
-      padding: mobile ? '28px 16px 16px' : '44px 40px 40px',
+      padding: mobile ? '28px 16px 80px' : '44px 40px 40px',
       overflowY: 'auto', height: '100%',
     }}>
       <div style={{

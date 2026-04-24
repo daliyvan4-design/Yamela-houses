@@ -101,7 +101,7 @@ export default function ContactPage() {
       {/* RIGHT — formulaire */}
       <div style={{
         display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
-        padding: mobile ? '32px 24px 40px' : '60px 56px',
+        padding: mobile ? '32px 24px 80px' : '60px 56px',
         overflowY: 'auto', background: T.bg,
       }}>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.2em',

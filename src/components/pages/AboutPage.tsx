@@ -85,7 +85,7 @@ export default function AboutPage() {
       {/* RIGHT — texte */}
       <div style={{
         display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
-        padding: mobile ? '32px 24px 40px' : '60px 56px 60px 52px',
+        padding: mobile ? '32px 24px 80px' : '60px 56px 60px 52px',
         overflowY: 'auto', background: T.bg,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
