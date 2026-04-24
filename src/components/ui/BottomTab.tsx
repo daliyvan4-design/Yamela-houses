@@ -48,7 +48,7 @@ export default function BottomTab({ page, setPage }: Props) {
         opacity: page === 'hero' ? 1 : 0.55,
         transition: 'opacity 0.2s',
       }}>
-        <Image src="/yamelogo.png" alt="Yamela" width={48} height={28} style={{ objectFit: 'contain' }} priority/>
+        <Image src="/yamelogo.png" alt="Yamela" width={96} height={56} style={{ objectFit: 'contain' }} priority/>
       </button>
 
       {/* Autres onglets */}
