@@ -7,7 +7,7 @@ const DEFAULT: ContactRecord = { address: '', email: '', phone: '' };
 
 export default function ContactPage() {
   const [info, setInfo] = useState<ContactRecord>(DEFAULT);
-  const [form, setForm] = useState({ name: '', email: '', message: '', type: 'Maison' });
+  const [form, setForm] = useState({ name: '', email: '', message: '', type: 'Résidentiel' });
   const [sent, setSent] = useState(false);
   const [hovBtn, setHovBtn] = useState(false);
 
@@ -100,7 +100,7 @@ export default function ContactPage() {
             <label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: T.muted, display: 'block', marginBottom: 10 }}>Type de projet</label>
             <div style={{ display: 'flex', gap: 0 }}>
-              {['Maison', 'Immeuble', 'Intérieur'].map(t => (
+              {['Intérieur', 'Résidentiel', 'Bureaux', 'Commercial'].map(t => (
                 <button key={t} type="button" onClick={() => setForm(f => ({ ...f, type: t }))} style={{
                   padding: '7px 20px', background: 'none', cursor: 'pointer',
                   border: `0.5px solid ${form.type === t ? T.accent : T.border}`,
