@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { T } from '@/lib/tokens';
-import LogoMark from './LogoMark';
 import { Page } from '@/lib/types';
 
 const icons = {
@@ -71,7 +71,7 @@ export default function Sidebar({ page, setPage }: Props) {
         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '28px 0 28px' }}
         title="Yamela Homes"
       >
-        <LogoMark size={40}/>
+        <Image src="/yamelogo.png" alt="Yamela" width={52} height={36} style={{ objectFit: 'contain' }} priority/>
       </button>
 
       <div style={{ width: '60%', height: '0.5px', background: T.border }}/>

@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
 import { useIsMobile } from '@/lib/useIsMobile';
@@ -41,28 +40,6 @@ export default function HeroPage({ setPage }: Props) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0D0D0D', overflow: 'clip' }}>
       <BlueprintSVG px={px} py={py}/>
-
-      {/* Logo */}
-      <div style={{
-        position: 'absolute',
-        top: mobile ? 28 : 36,
-        left: '50%',
-        transform: `translateX(-50%) translate(${mobile ? 0 : px * -6}px, ${mobile ? 0 : py * -4}px)`,
-        transition: 'transform 0.1s linear',
-        zIndex: 2,
-        animation: 'fadeIn 0.8s ease both',
-        animationDelay: '0.4s',
-        opacity: 0,
-      }}>
-        <Image
-          src="/yamelogo.png"
-          alt="Yamela"
-          width={mobile ? 100 : 130}
-          height={mobile ? 40 : 52}
-          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9 }}
-          priority
-        />
-      </div>
 
       {/* Text */}
       <div style={{

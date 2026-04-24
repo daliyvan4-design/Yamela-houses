@@ -1,7 +1,7 @@
 'use client';
+import Image from 'next/image';
 import { T } from '@/lib/tokens';
 import { Page } from '@/lib/types';
-import LogoMark from './LogoMark';
 
 const icons = {
   grid: (
@@ -48,7 +48,7 @@ export default function BottomTab({ page, setPage }: Props) {
         opacity: page === 'hero' ? 1 : 0.55,
         transition: 'opacity 0.2s',
       }}>
-        <LogoMark size={26} color={T.text}/>
+        <Image src="/yamelogo.png" alt="Yamela" width={48} height={28} style={{ objectFit: 'contain' }} priority/>
       </button>
 
       {/* Autres onglets */}
