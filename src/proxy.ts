@@ -13,7 +13,7 @@ async function hmac(message: string): Promise<string> {
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (!pathname.startsWith('/admin') || pathname === '/admin/login') {
