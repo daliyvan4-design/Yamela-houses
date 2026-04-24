@@ -42,10 +42,9 @@ export default function ContactPage() {
   return (
     <div className="page-enter" style={{
       height: '100%',
-      display: 'grid',
-      gridTemplateColumns: mobile ? '1fr' : '1fr 1.2fr',
-      gridTemplateRows: mobile ? 'auto 1fr' : '1fr',
-      overflow: mobile ? 'auto' : 'hidden',
+      display: mobile ? 'block' : 'grid',
+      gridTemplateColumns: '1fr 1.2fr',
+      overflowY: mobile ? 'auto' : 'hidden',
     }}>
 
       {/* LEFT — infos */}
@@ -82,27 +81,25 @@ export default function ContactPage() {
             </h2>
           </div>
 
-          {!mobile && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-              {[['Adresse', info.address], ['Email', info.email], ['Tél.', info.phone]]
-                .filter(([, v]) => v).map(([label, val]) => (
-                <div key={label}>
-                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
-                    textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{label}</p>
-                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 12,
-                    color: 'rgba(250,250,248,0.55)', letterSpacing: '0.03em' }}>{val}</p>
-                </div>
-              ))}
-            </div>
-          )}
+          <div style={{ display: 'flex', flexDirection: mobile ? 'row' : 'column', gap: mobile ? 20 : 24, flexWrap: 'wrap' }}>
+            {[['Adresse', info.address], ['Email', info.email], ['Tél.', info.phone]]
+              .filter(([, v]) => v).map(([label, val]) => (
+              <div key={label}>
+                <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
+                  textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{label}</p>
+                <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: mobile ? 11 : 12,
+                  color: 'rgba(250,250,248,0.55)', letterSpacing: '0.03em' }}>{val}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* RIGHT — formulaire */}
       <div style={{
         display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
-        padding: mobile ? '32px 24px 80px' : '60px 56px',
-        overflowY: 'auto', background: T.bg,
+        padding: mobile ? '32px 24px 100px' : '60px 56px',
+        background: T.bg,
       }}>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.2em',
           textTransform: 'uppercase', color: T.muted, marginBottom: 28 }}>Formulaire de contact</p>

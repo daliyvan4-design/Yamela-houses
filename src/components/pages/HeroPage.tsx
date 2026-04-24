@@ -48,7 +48,7 @@ export default function HeroPage({ setPage }: Props) {
         position: 'absolute',
         left: '6%',
         bottom: mobile ? 84 : '11%',
-        right: mobile ? '6%' : 'auto',
+        maxWidth: mobile ? '88%' : 'none',
         display: 'flex', flexDirection: 'column',
         transform: mobile ? 'none' : `translate(${px * -10}px, ${py * -8}px)`,
         transition: 'transform 0.1s linear',
@@ -100,15 +100,21 @@ export default function HeroPage({ setPage }: Props) {
         </div>
       </div>
 
-      {/* Scroll line — desktop only */}
-      {!mobile && <div style={{
-        position: 'absolute', bottom: 40, left: 'calc(6% + 2px)',
+      {/* Scroll / swipe indicator */}
+      <div style={{
+        position: 'absolute',
+        bottom: mobile ? 76 : 40,
+        right: mobile ? 24 : 'auto',
+        left: mobile ? 'auto' : 'calc(6% + 2px)',
         animation: 'fadeIn 1s ease both', animationDelay: '1.8s', opacity: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
       }}>
+        {mobile && <span style={{ fontSize: 8, letterSpacing: '0.18em', textTransform: 'uppercase',
+          color: 'rgba(200,169,122,0.4)', writingMode: 'vertical-rl' }}>scroll</span>}
         <div style={{ width: 1, height: 52, background: 'rgba(200,169,122,0.2)', overflow: 'hidden' }}>
           <div style={{ width: 1, height: '100%', background: T.accent, animation: 'scrollLine 2s ease-in-out infinite' }}/>
         </div>
-      </div>}
+      </div>
     </div>
   );
 }

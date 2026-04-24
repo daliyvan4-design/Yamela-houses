@@ -29,10 +29,9 @@ export default function AboutPage() {
   return (
     <div className="page-enter" style={{
       height: '100%',
-      display: 'grid',
-      gridTemplateColumns: mobile ? '1fr' : '1fr 1fr',
-      gridTemplateRows: mobile ? 'auto 1fr' : '1fr',
-      overflow: mobile ? 'auto' : 'hidden',
+      display: mobile ? 'block' : 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      overflowY: mobile ? 'auto' : 'hidden',
     }}>
 
       {/* LEFT — image + stats */}
@@ -85,8 +84,8 @@ export default function AboutPage() {
       {/* RIGHT — texte */}
       <div style={{
         display: 'flex', flexDirection: 'column', justifyContent: mobile ? 'flex-start' : 'center',
-        padding: mobile ? '32px 24px 80px' : '60px 56px 60px 52px',
-        overflowY: 'auto', background: T.bg,
+        padding: mobile ? '32px 24px 100px' : '60px 56px 60px 52px',
+        background: T.bg,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
           <div style={{ width: 28, height: '0.5px', background: T.accent }}/>
