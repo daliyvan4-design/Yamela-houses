@@ -8,7 +8,13 @@ const BORDER = 'rgba(200,169,122,0.15)';
 const A = '#C8A97A';
 
 export default async function AdminDashboard() {
-  const projects = await getProjects();
+  let projects: Awaited<ReturnType<typeof getProjects>> = [];
+  let dbError: string | null = null;
+  try {
+    projects = await getProjects();
+  } catch (err) {
+    dbError = String(err);
+  }
   const byCategory = {
     interieur: projects.filter(p => p.category === 'interieur').length,
     immeuble:  projects.filter(p => p.category === 'immeuble').length,
@@ -23,6 +29,13 @@ export default async function AdminDashboard() {
 
   return (
     <AdminShell title="Dashboard">
+      {dbError && (
+        <div style={{ background: 'rgba(250,100,100,0.1)', border: '0.5px solid rgba(250,100,100,0.4)',
+          padding: '16px 20px', marginBottom: 24, fontSize: 12, color: 'rgba(250,150,150,0.9)',
+          fontFamily: 'monospace', wordBreak: 'break-all' }}>
+          DB Error: {dbError}
+        </div>
+      )}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 48 }}>
         {cards.map(c => <DashboardCard key={c.href} {...c}/>)}
       </div>
