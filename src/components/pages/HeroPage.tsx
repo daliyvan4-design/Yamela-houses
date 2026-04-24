@@ -49,12 +49,10 @@ export default function HeroPage({ setPage }: Props) {
         transition: 'transform 0.1s linear',
       }}>
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24,
+          display: 'flex', alignItems: 'center', marginBottom: 24,
           animation: 'fadeUp 0.8s ease both', animationDelay: '0.8s', opacity: 0,
         }}>
           <div style={{ width: 32, height: '0.5px', background: T.accent }}/>
-          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.28em',
-            textTransform: 'uppercase', color: T.accent }}>Yamela, the Design Project</span>
         </div>
 
         <h1 style={{
@@ -63,7 +61,7 @@ export default function HeroPage({ setPage }: Props) {
           color: '#FAFAF8',
           animation: 'fadeUp 1s cubic-bezier(0.22,1,0.36,1) both', animationDelay: '1s', opacity: 0,
         }}>
-          Shaping<br/><em style={{ color: T.accent }}>Space.</em><br/>Defining Life.
+          Yamela,<br/><em style={{ color: T.accent }}>the Design</em><br/>Project.
         </h1>
 
         <div style={{
