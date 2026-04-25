@@ -94,7 +94,15 @@ export default function Sidebar({ page, setPage }: Props) {
         <div style={{ borderTop: `0.5px solid ${T.border}` }}/>
       </div>
 
-      <div style={{ width: '60%', height: '0.5px', background: T.border, marginBottom: 24 }}/>
+      <div style={{ width: '60%', height: '0.5px', background: T.border, marginBottom: 12 }}/>
+
+      <p style={{
+        fontSize: 7, letterSpacing: '0.12em', textTransform: 'uppercase',
+        color: 'rgba(13,13,13,0.25)', textAlign: 'center', lineHeight: 1.6,
+        padding: '0 8px', marginBottom: 14,
+      }}>
+        Propulsé par<br/>Xcompany digital<br/>2026
+      </p>
     </nav>
   );
 }

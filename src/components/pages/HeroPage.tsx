@@ -100,6 +100,19 @@ export default function HeroPage({ setPage }: Props) {
           </button>
         </div>
       </div>
+
+      {/* Signature */}
+      <p style={{
+        position: 'absolute',
+        bottom: mobile ? 72 : 18,
+        right: 20,
+        fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase',
+        color: 'rgba(250,250,248,0.18)', textAlign: 'right', lineHeight: 1.7,
+        zIndex: 2,
+        animation: 'fadeIn 1s ease both', animationDelay: '2s', opacity: 0,
+      }}>
+        Propulsé par Xcompany digital 2026
+      </p>
     </div>
   );
 }
