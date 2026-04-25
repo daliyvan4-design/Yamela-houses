@@ -107,7 +107,7 @@ export default function HeroPage({ setPage }: Props) {
         bottom: mobile ? 72 : 18,
         right: 20,
         fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase',
-        color: 'rgba(250,250,248,0.18)', textAlign: 'right', lineHeight: 1.7,
+        color: 'rgba(250,250,248,0.08)', textAlign: 'right', lineHeight: 1.7,
         zIndex: 2,
         animation: 'fadeIn 1s ease both', animationDelay: '2s', opacity: 0,
       }}>
