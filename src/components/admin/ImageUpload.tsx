@@ -77,7 +77,7 @@ export default function ImageUpload({ value, onChange, label = 'Image' }: Props)
           Supprimer l&apos;image
         </button>
       )}
-      <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }}
+      <input ref={inputRef} type="file" accept="image/*,.heic,.heif" style={{ display: 'none' }}
         onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }}/>
     </div>
   );
