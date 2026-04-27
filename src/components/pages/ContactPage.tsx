@@ -123,7 +123,7 @@ export default function ContactPage() {
             <label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
               textTransform: 'uppercase', color: T.muted, display: 'block', marginBottom: 10 }}>Type de projet</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {['Intérieur', 'Résidentiel', 'Bureaux', 'Commercial', 'Mobilier'].map(t => (
+              {['Résidentiel', 'Bureaux', 'Commercial', 'Intérieur', 'Mobilier'].map(t => (
                 <button key={t} type="button" onClick={() => setForm(f => ({ ...f, type: t }))} style={{
                   padding: '7px 16px', background: 'none', cursor: 'pointer',
                   border: `0.5px solid ${form.type === t ? T.accent : T.border}`,

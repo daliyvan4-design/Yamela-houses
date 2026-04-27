@@ -7,9 +7,10 @@ export interface ProjectRecord {
   location: string;
   year: string;
   tags: string;
-  category: 'interieur' | 'residentiel' | 'bureaux' | 'commercial' | 'mobilier';
+  category: 'residentiel' | 'bureaux' | 'commercial' | 'interieur' | 'mobilier';
   description: string;
   image: string;
+  gallery: string[];
 }
 
 export interface ContactRecord {
@@ -31,17 +32,17 @@ export interface AboutRecord {
 export async function getProjects(): Promise<ProjectRecord[]> {
   const sql = getSql();
   const rows = await sql`SELECT * FROM projects ORDER BY id`;
-  return rows as ProjectRecord[];
+  return (rows as ProjectRecord[]).map(r => ({ ...r, gallery: r.gallery ?? [] }));
 }
 
 export async function createProject(p: Omit<ProjectRecord, 'id'>): Promise<ProjectRecord> {
   const sql = getSql();
   const [row] = await sql`
-    INSERT INTO projects (name, location, year, tags, category, description, image)
-    VALUES (${p.name}, ${p.location}, ${p.year}, ${p.tags}, ${p.category}, ${p.description}, ${p.image})
+    INSERT INTO projects (name, location, year, tags, category, description, image, gallery)
+    VALUES (${p.name}, ${p.location}, ${p.year}, ${p.tags}, ${p.category}, ${p.description}, ${p.image}, ${JSON.stringify(p.gallery ?? [])})
     RETURNING *
   `;
-  return row as ProjectRecord;
+  return { ...(row as ProjectRecord), gallery: (row as ProjectRecord).gallery ?? [] };
 }
 
 export async function updateProject(id: number, p: Partial<Omit<ProjectRecord, 'id'>>): Promise<ProjectRecord> {
@@ -54,11 +55,12 @@ export async function updateProject(id: number, p: Partial<Omit<ProjectRecord, '
       tags        = COALESCE(${p.tags        ?? null}, tags),
       category    = COALESCE(${p.category    ?? null}, category),
       description = COALESCE(${p.description ?? null}, description),
-      image       = COALESCE(${p.image       ?? null}, image)
+      image       = COALESCE(${p.image       ?? null}, image),
+      gallery     = COALESCE(${p.gallery !== undefined ? JSON.stringify(p.gallery) : null}, gallery)
     WHERE id = ${id}
     RETURNING *
   `;
-  return row as ProjectRecord;
+  return { ...(row as ProjectRecord), gallery: (row as ProjectRecord).gallery ?? [] };
 }
 
 export async function deleteProject(id: number): Promise<void> {

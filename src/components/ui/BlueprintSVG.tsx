@@ -95,9 +95,9 @@ export default function BlueprintSVG({ px, py }: Props) {
           [480, 265, 'SÉJOUR',        10],
           [792, 265, 'CUISINE',        10],
           [487, 535, 'CH. PRINCIPALE',  8],
-          [708, 462, 'CH. 2',           8],
+          [708, 462, 'DRESSING',         8],
           [708, 583, 'SDB',             8],
-          [868, 535, 'DRESSING',        7.5],
+          [868, 535, 'CELLIER',         7.5],
           [490,  82, 'TERRASSE',        7.5],
         ].map(([x, y, lbl, sz]) => (
           <text key={lbl as string} x={x} y={y} fill={A} fontFamily="DM Sans" fontSize={sz as number}

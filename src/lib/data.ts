@@ -8,13 +8,13 @@ export interface Project {
   rows: number;
 }
 
-export type Category = 'interieur' | 'residentiel' | 'bureaux' | 'commercial' | 'mobilier';
+export type Category = 'residentiel' | 'bureaux' | 'commercial' | 'interieur' | 'mobilier';
 
 export const catLabels: Record<Category, string> = {
-  interieur:   'Intérieur',
   residentiel: 'Résidentiel',
   bureaux:     'Bureaux',
   commercial:  'Commercial',
+  interieur:   'Intérieur',
   mobilier:    'Mobilier',
 };
 
