@@ -20,10 +20,11 @@ export default async function AdminDashboard() {
     residentiel: projects.filter(p => p.category === 'residentiel').length,
     bureaux:     projects.filter(p => p.category === 'bureaux').length,
     commercial:  projects.filter(p => p.category === 'commercial').length,
+    mobilier:    projects.filter(p => p.category === 'mobilier').length,
   };
 
   const cards = [
-    { href: '/admin/projects', label: 'Projets', value: projects.length, sub: `${byCategory.interieur} intérieur · ${byCategory.residentiel} résidentiel · ${byCategory.bureaux} bureaux · ${byCategory.commercial} commercial` },
+    { href: '/admin/projects', label: 'Projets', value: projects.length, sub: `${byCategory.interieur} intérieur · ${byCategory.residentiel} résidentiel · ${byCategory.bureaux} bureaux · ${byCategory.commercial} commercial · ${byCategory.mobilier} mobilier` },
     { href: '/admin/about',    label: 'À propos', value: '—', sub: 'Description, image, stats' },
     { href: '/admin/contact',  label: 'Contact',  value: '—', sub: 'Email, téléphone, adresse' },
   ];

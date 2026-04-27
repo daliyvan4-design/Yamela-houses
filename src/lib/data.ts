@@ -8,13 +8,14 @@ export interface Project {
   rows: number;
 }
 
-export type Category = 'interieur' | 'residentiel' | 'bureaux' | 'commercial';
+export type Category = 'interieur' | 'residentiel' | 'bureaux' | 'commercial' | 'mobilier';
 
 export const catLabels: Record<Category, string> = {
   interieur:   'Intérieur',
   residentiel: 'Résidentiel',
   bureaux:     'Bureaux',
   commercial:  'Commercial',
+  mobilier:    'Mobilier',
 };
 
 export const allProjects: Record<Category, Project[]> = {
@@ -22,4 +23,5 @@ export const allProjects: Record<Category, Project[]> = {
   residentiel: [],
   bureaux:     [],
   commercial:  [],
+  mobilier:    [],
 };

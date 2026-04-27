@@ -90,7 +90,7 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
           Réponse attentive au site, à la lumière et aux matériaux.
         </p>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, letterSpacing: '0.14em',
-          textTransform: 'uppercase', color: 'rgba(250,250,248,0.2)', marginTop: 10 }}>
+          textTransform: 'uppercase', color: 'rgba(250,250,248,0.45)', marginTop: 10 }}>
           {project.tags} · Cliquer pour agrandir
         </p>
       </div>

@@ -11,6 +11,7 @@ const CAT_OPTIONS = [
   { value: 'residentiel', label: 'Résidentiel' },
   { value: 'bureaux',     label: 'Bureaux' },
   { value: 'commercial',  label: 'Commercial' },
+  { value: 'mobilier',    label: 'Mobilier' },
 ];
 
 const EMPTY: Omit<ProjectRecord, 'id'> = {

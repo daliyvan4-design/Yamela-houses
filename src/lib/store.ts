@@ -7,7 +7,7 @@ export interface ProjectRecord {
   location: string;
   year: string;
   tags: string;
-  category: 'interieur' | 'residentiel' | 'bureaux' | 'commercial';
+  category: 'interieur' | 'residentiel' | 'bureaux' | 'commercial' | 'mobilier';
   description: string;
   image: string;
 }
