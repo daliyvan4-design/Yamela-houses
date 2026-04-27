@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Yamela Homes — Architecture & Design',
+  title: 'Yamela — The Design Project',
   description: 'Boutique architecture practice. Marrakech · Casablanca · Rabat.',
   icons: { icon: '/yamelogo.png', apple: '/yamelogo.png' },
 };
