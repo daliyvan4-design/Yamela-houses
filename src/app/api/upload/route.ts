@@ -3,6 +3,9 @@ import { v2 as cloudinary } from 'cloudinary';
 
 export const dynamic = 'force-dynamic';
 
+// Augmente la limite à 20 MB pour les grandes images (2560×2560 etc.)
+export const maxDuration = 60;
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key:    process.env.CLOUDINARY_API_KEY,
@@ -24,11 +27,17 @@ export async function POST(req: Request) {
       {
         folder: 'yamela-homes',
         resource_type: 'image',
-        format: isPng ? 'png' : 'jpg',
+        format: isHeic ? 'jpg' : isPng ? 'png' : 'jpg',
         quality: 'auto:best',
         flags: 'progressive',
-        transformation: [{ fetch_format: isPng ? 'png' : 'jpg', quality: 'auto:best' }],
-        ...(isHeic ? { format: 'jpg' } : {}),
+        transformation: [
+          {
+            width: 2560,
+            crop: 'limit',
+            fetch_format: isPng ? 'png' : 'jpg',
+            quality: 'auto:best',
+          },
+        ],
       },
       (err, res) => err ? reject(err) : resolve(res as { secure_url: string }),
     ).end(buffer);
