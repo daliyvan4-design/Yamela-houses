@@ -42,15 +42,17 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
         pointerEvents: 'none',
       }}/>
 
-      {/* Year badge */}
-      <div style={{
-        position: 'absolute', top: 14, right: 14, zIndex: 2,
-        opacity: hov ? 0 : 1, transition: 'opacity 0.3s',
-      }}>
-        <div style={{ width: 20, height: '0.5px', background: T.accent, marginBottom: 3 }}/>
-        <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9,
-          color: 'rgba(250,250,248,0.5)', letterSpacing: '0.1em' }}>{project.year}</span>
-      </div>
+      {/* Year badge — masqué pour mobilier */}
+      {project.category !== 'mobilier' && (
+        <div style={{
+          position: 'absolute', top: 14, right: 14, zIndex: 2,
+          opacity: hov ? 0 : 1, transition: 'opacity 0.3s',
+        }}>
+          <div style={{ width: 20, height: '0.5px', background: T.accent, marginBottom: 3 }}/>
+          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9,
+            color: 'rgba(250,250,248,0.5)', letterSpacing: '0.1em' }}>{project.year}</span>
+        </div>
+      )}
 
       {/* Name */}
       <div style={{
@@ -74,10 +76,12 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
         <div style={{ width: 24, height: '0.5px', background: T.accent, marginBottom: 12 }}/>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
-              textTransform: 'uppercase', color: T.accent, marginBottom: 5 }}>
-              {project.year} · {project.location}
-            </p>
+            {project.category !== 'mobilier' && (
+              <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
+                textTransform: 'uppercase', color: T.accent, marginBottom: 5 }}>
+                {project.year} · {project.location}
+              </p>
+            )}
             <h3 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 500,
               fontSize: 'clamp(18px,2vw,24px)', color: '#FAFAF8', letterSpacing: '0.03em', lineHeight: 1.1 }}>
               {project.name}
@@ -91,7 +95,7 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
         </p>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, fontWeight: 400,
           letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(250,250,248,0.55)', marginTop: 10 }}>
-          {project.phase ?? 'étude'} · Cliquer pour agrandir
+          {project.category !== 'mobilier' ? `${project.phase ?? 'étude'} · ` : ''}Cliquer pour agrandir
         </p>
       </div>
     </div>

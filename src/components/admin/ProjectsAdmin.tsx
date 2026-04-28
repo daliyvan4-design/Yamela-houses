@@ -116,13 +116,19 @@ export default function ProjectsAdmin({ initial }: Props) {
             color: A, marginBottom: 24 }}>{editingId !== null ? 'Modifier le projet' : 'Nouveau projet'}</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
-            <Field label="Nom du projet" value={form.name}     onChange={e => patch('name', e.target.value)}     placeholder="Villa Azur"/>
-            <Field label="Localisation"  value={form.location} onChange={e => patch('location', e.target.value)} placeholder="Marrakech, MA"/>
-            <Field label="Année"         value={form.year}     onChange={e => patch('year', e.target.value)}     placeholder="2024"/>
+            <Field label="Nom du projet" value={form.name} onChange={e => patch('name', e.target.value)} placeholder="Table Azur"/>
             <SelectField label="Catégorie" value={form.category} options={CAT_OPTIONS}
               onChange={e => patch('category', e.target.value as ProjectRecord['category'])}/>
-            <SelectField label="Phase" value={form.phase} options={PHASE_OPTIONS}
-              onChange={e => patch('phase', e.target.value as Phase)}/>
+            {form.category !== 'mobilier' && (
+              <Field label="Localisation" value={form.location} onChange={e => patch('location', e.target.value)} placeholder="Marrakech, MA"/>
+            )}
+            {form.category !== 'mobilier' && (
+              <Field label="Année" value={form.year} onChange={e => patch('year', e.target.value)} placeholder="2024"/>
+            )}
+            {form.category !== 'mobilier' && (
+              <SelectField label="Phase" value={form.phase} options={PHASE_OPTIONS}
+                onChange={e => patch('phase', e.target.value as Phase)}/>
+            )}
           </div>
 
           <div style={{ marginBottom: 20 }}>
@@ -196,7 +202,10 @@ export default function ProjectsAdmin({ initial }: Props) {
             <div>
               <p style={{ fontSize: 13, color: '#FAFAF8', letterSpacing: '0.02em', marginBottom: 3 }}>{p.name}</p>
               <p style={{ fontSize: 10, color: 'rgba(250,250,248,0.3)', letterSpacing: '0.04em' }}>
-                {p.location} · {p.year} · <span style={{ color: 'rgba(200,169,122,0.6)' }}>{p.phase ?? 'étude'}</span>
+                {p.category !== 'mobilier'
+                  ? <><span>{p.location} · {p.year} · </span><span style={{ color: 'rgba(200,169,122,0.6)' }}>{p.phase ?? 'étude'}</span></>
+                  : <span style={{ color: 'rgba(200,169,122,0.6)' }}>mobilier</span>
+                }
                 {(p.gallery ?? []).length > 0 && <span style={{ color: A, marginLeft: 8 }}>+{p.gallery.length} photo{p.gallery.length > 1 ? 's' : ''}</span>}
               </p>
             </div>

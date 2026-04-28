@@ -130,10 +130,12 @@ export default function ProjectExpand({ project, onClose }: Props) {
 
         <div style={{ width: 28, height: '0.5px', background: T.accent, marginBottom: 24 }}/>
 
-        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.22em',
-          textTransform: 'uppercase', color: T.accent, marginBottom: 12 }}>
-          {project.year} · {project.location}
-        </p>
+        {project.category !== 'mobilier' && (
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.22em',
+            textTransform: 'uppercase', color: T.accent, marginBottom: 12 }}>
+            {project.year} · {project.location}
+          </p>
+        )}
 
         <h2 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300,
           fontSize: 'clamp(26px,3vw,40px)', color: '#FAFAF8',
@@ -151,7 +153,10 @@ export default function ProjectExpand({ project, onClose }: Props) {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
-          {[['Phase', phase], ['Année', project.year], ['Localisation', project.location], ['Catégorie', project.category]].map(([k, v]) => (
+          {(project.category === 'mobilier'
+            ? [['Catégorie', 'Mobilier']]
+            : [['Phase', phase], ['Année', project.year], ['Localisation', project.location], ['Catégorie', project.category]]
+          ).map(([k, v]) => (
             <div key={k}>
               <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{k}</p>

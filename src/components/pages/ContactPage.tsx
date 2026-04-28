@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { T } from '@/lib/tokens';
 import { ContactRecord } from '@/lib/store';
 import { getCachedContact } from '@/lib/apiCache';
@@ -85,7 +85,11 @@ export default function ContactPage() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: mobile ? 'row' : 'column', gap: mobile ? 20 : 24, flexWrap: 'wrap' }}>
-            {[['Adresse', info.address], ['Email', info.email], ['Tél.', info.phone]]
+            {/* Adresse — carte cliquable Maps */}
+            {info.address && (
+              <AddressCard address={info.address} mobile={!!mobile}/>
+            )}
+            {[['Email', info.email], ['Tél.', info.phone]]
               .filter(([, v]) => v).map(([label, val]) => (
               <div key={label}>
                 <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
@@ -178,5 +182,57 @@ export default function ContactPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+function AddressCard({ address, mobile }: { address: string; mobile: boolean }) {
+  const [hov, setHov] = useState(false);
+  const [tapped, setTapped] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(address)}`;
+
+  const handleTap = () => {
+    setTapped(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setTapped(false), 400);
+  };
+
+  const scale = tapped ? 0.96 : hov ? 1.02 : 1;
+
+  return (
+    <a
+      href={mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      onTouchStart={handleTap}
+      style={{
+        display: 'block', textDecoration: 'none',
+        border: `0.5px solid ${hov || tapped ? 'rgba(200,169,122,0.5)' : 'rgba(200,169,122,0.15)'}`,
+        padding: mobile ? '10px 14px' : '12px 16px',
+        background: hov || tapped ? 'rgba(200,169,122,0.06)' : 'rgba(200,169,122,0.02)',
+        transform: `scale(${scale})`,
+        transition: 'transform 0.25s cubic-bezier(0.22,1,0.36,1), background 0.2s, border-color 0.2s',
+        cursor: 'pointer',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+        <span style={{ color: T.accent, fontSize: 12, marginTop: 1, flexShrink: 0 }}>◎</span>
+        <div>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.2em',
+            textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>Adresse</p>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: mobile ? 11 : 12,
+            color: 'rgba(250,250,248,0.55)', letterSpacing: '0.03em', lineHeight: 1.5 }}>
+            {address}
+          </p>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, letterSpacing: '0.16em',
+            textTransform: 'uppercase', color: 'rgba(200,169,122,0.4)', marginTop: 6 }}>
+            Ouvrir dans Maps →
+          </p>
+        </div>
+      </div>
+    </a>
   );
 }
