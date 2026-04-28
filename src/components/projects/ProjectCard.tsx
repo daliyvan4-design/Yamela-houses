@@ -49,8 +49,9 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
           opacity: hov ? 0 : 1, transition: 'opacity 0.3s',
         }}>
           <div style={{ width: 20, height: '0.5px', background: T.accent, marginBottom: 3 }}/>
-          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9,
-            color: 'rgba(250,250,248,0.5)', letterSpacing: '0.1em' }}>{project.year}</span>
+          <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, fontWeight: 600,
+            color: '#1a1a1a', letterSpacing: '0.1em',
+            textShadow: '0 0 8px rgba(255,255,255,0.8)' }}>{project.year}</span>
         </div>
       )}
 
