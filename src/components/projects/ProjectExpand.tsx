@@ -11,7 +11,7 @@ export default function ProjectExpand({ project, onClose }: Props) {
   const mobile = useIsMobile();
   const photos = [project.image, ...(project.gallery ?? [])].filter(Boolean);
   const [active, setActive] = useState(0);
-  const [type, surface] = project.tags.split('·').map(s => s.trim());
+  const phase = project.phase ?? 'étude';
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
@@ -151,7 +151,7 @@ export default function ProjectExpand({ project, onClose }: Props) {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
-          {[['Surface', surface], ['Type', type], ['Année', project.year], ['Localisation', project.location]].map(([k, v]) => (
+          {[['Phase', phase], ['Année', project.year], ['Localisation', project.location], ['Catégorie', project.category]].map(([k, v]) => (
             <div key={k}>
               <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 9, letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: T.accent, marginBottom: 4 }}>{k}</p>

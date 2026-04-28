@@ -57,7 +57,7 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
         position: 'absolute', bottom: 18, left: 18, zIndex: 2,
         opacity: hov ? 0 : 1, transition: 'opacity 0.25s',
       }}>
-        <p style={{ fontFamily: 'var(--font-cormorant)', fontSize: 17, fontWeight: 300,
+        <p style={{ fontFamily: 'var(--font-cormorant)', fontSize: 17, fontWeight: 500,
           color: '#FAFAF8', letterSpacing: '0.04em' }}>{project.name}</p>
       </div>
 
@@ -78,20 +78,20 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
               textTransform: 'uppercase', color: T.accent, marginBottom: 5 }}>
               {project.year} · {project.location}
             </p>
-            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300,
+            <h3 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 500,
               fontSize: 'clamp(18px,2vw,24px)', color: '#FAFAF8', letterSpacing: '0.03em', lineHeight: 1.1 }}>
               {project.name}
             </h3>
           </div>
           <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, color: T.accent, marginTop: 2 }}>→</span>
         </div>
-        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 11, color: 'rgba(250,250,248,0.42)',
-          lineHeight: 1.7, marginTop: 10, letterSpacing: '0.02em' }}>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 11, fontWeight: 400,
+          color: 'rgba(250,250,248,0.65)', lineHeight: 1.7, marginTop: 10, letterSpacing: '0.02em' }}>
           Réponse attentive au site, à la lumière et aux matériaux.
         </p>
-        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, letterSpacing: '0.14em',
-          textTransform: 'uppercase', color: 'rgba(250,250,248,0.45)', marginTop: 10 }}>
-          {project.tags} · Cliquer pour agrandir
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, fontWeight: 400,
+          letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(250,250,248,0.55)', marginTop: 10 }}>
+          {project.phase ?? 'étude'} · Cliquer pour agrandir
         </p>
       </div>
     </div>

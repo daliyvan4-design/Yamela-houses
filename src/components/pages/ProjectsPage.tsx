@@ -34,7 +34,7 @@ export default function ProjectsPage() {
         <div>
           <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, letterSpacing: '0.2em',
             textTransform: 'uppercase', color: T.accent, marginBottom: 8 }}>Portfolio</p>
-          <h2 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 300,
+          <h2 style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 500,
             fontSize: mobile ? 30 : 40, letterSpacing: '0.04em' }}>
             Nos Projets
           </h2>

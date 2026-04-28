@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { ProjectRecord } from '@/lib/store';
+import { ProjectRecord, Phase } from '@/lib/store';
 import { Field, TextareaField, SelectField } from './Field';
 import ImageUpload from './ImageUpload';
 
@@ -14,9 +14,15 @@ const CAT_OPTIONS = [
   { value: 'mobilier',    label: 'Mobilier' },
 ];
 
+const PHASE_OPTIONS = [
+  { value: 'étude',        label: 'Étude' },
+  { value: 'construction', label: 'Construction' },
+  { value: 'terminé',      label: 'Terminé' },
+];
+
 const EMPTY: Omit<ProjectRecord, 'id'> = {
-  name: '', location: '', year: '', tags: '',
-  category: 'residentiel', description: '', image: '', gallery: [],
+  name: '', location: '', year: '',
+  category: 'residentiel', phase: 'étude', description: '', image: '', gallery: [],
 };
 
 type FormData = Omit<ProjectRecord, 'id'>;
@@ -39,8 +45,8 @@ export default function ProjectsAdmin({ initial }: Props) {
   const openCreate = () => { setEditingId(null); setForm(EMPTY); setShowForm(true); };
   const openEdit = (p: ProjectRecord) => {
     setEditingId(p.id);
-    setForm({ name: p.name, location: p.location, year: p.year, tags: p.tags,
-      category: p.category, description: p.description, image: p.image, gallery: p.gallery ?? [] });
+    setForm({ name: p.name, location: p.location, year: p.year,
+      category: p.category, phase: p.phase ?? 'étude', description: p.description, image: p.image, gallery: p.gallery ?? [] });
     setShowForm(true);
   };
   const closeForm = () => { setShowForm(false); setEditingId(null); };
@@ -110,12 +116,13 @@ export default function ProjectsAdmin({ initial }: Props) {
             color: A, marginBottom: 24 }}>{editingId !== null ? 'Modifier le projet' : 'Nouveau projet'}</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
-            <Field label="Nom du projet"                  value={form.name}     onChange={e => patch('name', e.target.value)}     placeholder="Villa Azur"/>
-            <Field label="Localisation"                   value={form.location} onChange={e => patch('location', e.target.value)} placeholder="Marrakech, MA"/>
-            <Field label="Année"                          value={form.year}     onChange={e => patch('year', e.target.value)}     placeholder="2024"/>
-            <Field label="Surface (ex: Maison · 420m²)"  value={form.tags}     onChange={e => patch('tags', e.target.value)}     placeholder="Maison · 420m²"/>
+            <Field label="Nom du projet" value={form.name}     onChange={e => patch('name', e.target.value)}     placeholder="Villa Azur"/>
+            <Field label="Localisation"  value={form.location} onChange={e => patch('location', e.target.value)} placeholder="Marrakech, MA"/>
+            <Field label="Année"         value={form.year}     onChange={e => patch('year', e.target.value)}     placeholder="2024"/>
             <SelectField label="Catégorie" value={form.category} options={CAT_OPTIONS}
               onChange={e => patch('category', e.target.value as ProjectRecord['category'])}/>
+            <SelectField label="Phase" value={form.phase} options={PHASE_OPTIONS}
+              onChange={e => patch('phase', e.target.value as Phase)}/>
           </div>
 
           <div style={{ marginBottom: 20 }}>
@@ -189,7 +196,7 @@ export default function ProjectsAdmin({ initial }: Props) {
             <div>
               <p style={{ fontSize: 13, color: '#FAFAF8', letterSpacing: '0.02em', marginBottom: 3 }}>{p.name}</p>
               <p style={{ fontSize: 10, color: 'rgba(250,250,248,0.3)', letterSpacing: '0.04em' }}>
-                {p.location} · {p.year}
+                {p.location} · {p.year} · <span style={{ color: 'rgba(200,169,122,0.6)' }}>{p.phase ?? 'étude'}</span>
                 {(p.gallery ?? []).length > 0 && <span style={{ color: A, marginLeft: 8 }}>+{p.gallery.length} photo{p.gallery.length > 1 ? 's' : ''}</span>}
               </p>
             </div>

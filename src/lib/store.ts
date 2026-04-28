@@ -1,13 +1,15 @@
 import { getSql } from './db';
 
 /* ── Types ── */
+export type Phase = 'étude' | 'construction' | 'terminé';
+
 export interface ProjectRecord {
   id: number;
   name: string;
   location: string;
   year: string;
-  tags: string;
   category: 'residentiel' | 'bureaux' | 'commercial' | 'interieur' | 'mobilier';
+  phase: Phase;
   description: string;
   image: string;
   gallery: string[];
@@ -38,8 +40,8 @@ export async function getProjects(): Promise<ProjectRecord[]> {
 export async function createProject(p: Omit<ProjectRecord, 'id'>): Promise<ProjectRecord> {
   const sql = getSql();
   const [row] = await sql`
-    INSERT INTO projects (name, location, year, tags, category, description, image, gallery)
-    VALUES (${p.name}, ${p.location}, ${p.year}, ${p.tags}, ${p.category}, ${p.description}, ${p.image}, ${JSON.stringify(p.gallery ?? [])})
+    INSERT INTO projects (name, location, year, category, phase, description, image, gallery)
+    VALUES (${p.name}, ${p.location}, ${p.year}, ${p.category}, ${p.phase ?? 'étude'}, ${p.description}, ${p.image}, ${JSON.stringify(p.gallery ?? [])})
     RETURNING *
   `;
   return { ...(row as ProjectRecord), gallery: (row as ProjectRecord).gallery ?? [] };
@@ -52,8 +54,8 @@ export async function updateProject(id: number, p: Partial<Omit<ProjectRecord, '
       name        = COALESCE(${p.name        ?? null}, name),
       location    = COALESCE(${p.location    ?? null}, location),
       year        = COALESCE(${p.year        ?? null}, year),
-      tags        = COALESCE(${p.tags        ?? null}, tags),
       category    = COALESCE(${p.category    ?? null}, category),
+      phase       = COALESCE(${p.phase       ?? null}, phase),
       description = COALESCE(${p.description ?? null}, description),
       image       = COALESCE(${p.image       ?? null}, image),
       gallery     = COALESCE(${p.gallery !== undefined ? JSON.stringify(p.gallery) : null}, gallery)
