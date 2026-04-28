@@ -40,7 +40,7 @@ export default function ProjectExpand({ project, onClose }: Props) {
         <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: mobile ? 220 : 0 }}>
           {photos[active]
             // eslint-disable-next-line @next/next/no-img-element
-            ? <img src={photos[active]} alt={project.name}
+            ? <img src={photos[active]} alt={project.name} loading="eager" decoding="async"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
             : <ImgPlaceholder label={project.name} style={{ width: '100%', height: '100%' }}/>
           }
@@ -101,7 +101,7 @@ export default function ProjectExpand({ project, onClose }: Props) {
                 transition: 'outline 0.15s', overflow: 'hidden',
               }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
+                <img src={url} alt="" loading="eager" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
               </button>
             ))}
           </div>

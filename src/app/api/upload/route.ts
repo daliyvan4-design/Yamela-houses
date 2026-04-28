@@ -16,11 +16,20 @@ export async function POST(req: Request) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
+  const isPng  = file.name.toLowerCase().endsWith('.png') || file.type === 'image/png';
   const isHeic = file.name.toLowerCase().match(/\.hei[cf]$/) || file.type === 'image/heic' || file.type === 'image/heif';
 
   const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
     cloudinary.uploader.upload_stream(
-      { folder: 'yamela-homes', resource_type: 'image', ...(isHeic ? { format: 'jpg' } : {}) },
+      {
+        folder: 'yamela-homes',
+        resource_type: 'image',
+        format: isPng ? 'png' : 'jpg',
+        quality: 'auto:best',
+        flags: 'progressive',
+        transformation: [{ fetch_format: isPng ? 'png' : 'jpg', quality: 'auto:best' }],
+        ...(isHeic ? { format: 'jpg' } : {}),
+      },
       (err, res) => err ? reject(err) : resolve(res as { secure_url: string }),
     ).end(buffer);
   });

@@ -23,7 +23,7 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
     >
       {project.image
         // eslint-disable-next-line @next/next/no-img-element
-        ? <img src={project.image} alt={project.name} style={{
+        ? <img src={project.image} alt={project.name} loading="eager" decoding="async" style={{
             width: '100%', height: '100%', objectFit: 'cover', display: 'block',
             transform: hov ? 'scale(1.05)' : 'scale(1)',
             transition: 'transform 1s cubic-bezier(0.22,1,0.36,1)',
