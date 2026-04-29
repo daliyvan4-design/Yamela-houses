@@ -50,15 +50,17 @@ export default function BottomTab({ page, setPage }: Props) {
     }}>
       {/* Logo — bouton home */}
       <button onClick={() => setPage('hero')} style={{
-        width: 88, flexShrink: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flex: 1,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        gap: 4,
         background: 'none', border: 'none', borderRight: `0.5px solid ${T.border}`,
         cursor: 'pointer', padding: 0,
         opacity: page === 'hero' ? 1 : 0.55,
         transition: 'opacity 0.2s',
+        borderBottom: page === 'hero' ? `1.5px solid ${T.accent}` : '1.5px solid transparent',
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '90px', height: '90px', display: 'block' }}/>
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '28px', height: '28px', display: 'block' }}/>
       </button>
 
       {/* Autres onglets */}

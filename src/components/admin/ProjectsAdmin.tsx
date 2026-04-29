@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ProjectRecord, Phase } from '@/lib/store';
 import { Field, TextareaField, SelectField } from './Field';
 import ImageUpload from './ImageUpload';
@@ -22,7 +22,7 @@ const PHASE_OPTIONS = [
 
 const EMPTY: Omit<ProjectRecord, 'id'> = {
   name: '', location: '', year: '',
-  category: 'residentiel', phase: 'étude', description: '', image: '', gallery: [],
+  category: 'residentiel', phase: 'étude', description: '', image: '', gallery: [], featured: false,
 };
 
 type FormData = Omit<ProjectRecord, 'id'>;
@@ -38,6 +38,7 @@ export default function ProjectsAdmin({ initial }: Props) {
   const [filter, setFilter] = useState<Filter>('all');
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  const dragIdx = useRef<number | null>(null);
 
   const flash = (m: string) => { setMsg(m); setTimeout(() => setMsg(''), 2500); };
   const visible = filter === 'all' ? projects : projects.filter(p => p.category === filter);
@@ -46,9 +47,28 @@ export default function ProjectsAdmin({ initial }: Props) {
   const openEdit = (p: ProjectRecord) => {
     setEditingId(p.id);
     setForm({ name: p.name, location: p.location, year: p.year,
-      category: p.category, phase: p.phase ?? 'étude', description: p.description, image: p.image, gallery: p.gallery ?? [] });
+      category: p.category, phase: p.phase ?? 'étude', description: p.description,
+      image: p.image, gallery: p.gallery ?? [], featured: p.featured ?? false });
     setShowForm(true);
   };
+
+  const toggleFeatured = async (p: ProjectRecord) => {
+    const updated = await fetch(`/api/projects/${p.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ featured: !p.featured }),
+    }).then(r => r.json());
+    setProjects(prev => prev.map(x => x.id === updated.id ? updated : x));
+    flash(updated.featured ? '★ Projet mis en avant.' : 'Projet retiré de la mise en avant.');
+  };
+
+  const moveGallery = (from: number, to: number) =>
+    setForm(f => {
+      const g = [...(f.gallery ?? [])];
+      const [item] = g.splice(from, 1);
+      g.splice(to, 0, item);
+      return { ...f, gallery: g };
+    });
   const closeForm = () => { setShowForm(false); setEditingId(null); };
 
   const patch = <K extends keyof FormData>(k: K, v: FormData[K]) => setForm(f => ({ ...f, [k]: v }));
@@ -142,18 +162,34 @@ export default function ProjectsAdmin({ initial }: Props) {
             <ImageUpload label="Photo de profil (principale)" value={form.image} onChange={url => patch('image', url)}/>
           </div>
 
-          {/* Photos secondaires */}
+          {/* Photos secondaires — drag-and-drop pour réordonner */}
           <div style={{ marginBottom: 28 }}>
             <p style={{ fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: 'rgba(250,250,248,0.4)', marginBottom: 16 }}>
+              color: 'rgba(250,250,248,0.4)', marginBottom: 4 }}>
               Photos secondaires ({(form.gallery ?? []).length})
+            </p>
+            <p style={{ fontSize: 9, color: 'rgba(250,250,248,0.2)', letterSpacing: '0.06em', marginBottom: 16 }}>
+              Glisser pour réordonner
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
               {(form.gallery ?? []).map((url, i) => (
-                <div key={i} style={{ position: 'relative' }}>
-                  <ImageUpload label={`Photo ${i + 1}`} value={url} onChange={u => setGalleryUrl(i, u)}/>
+                <div
+                  key={i}
+                  draggable
+                  onDragStart={() => { dragIdx.current = i; }}
+                  onDragOver={e => { e.preventDefault(); }}
+                  onDrop={e => { e.preventDefault(); if (dragIdx.current !== null && dragIdx.current !== i) moveGallery(dragIdx.current, i); dragIdx.current = null; }}
+                  style={{ position: 'relative', cursor: 'grab', opacity: 1 }}
+                >
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, zIndex: 2,
+                    background: 'rgba(13,13,13,0.7)', padding: '3px 7px',
+                    fontSize: 9, color: 'rgba(200,169,122,0.7)', letterSpacing: '0.1em',
+                    pointerEvents: 'none',
+                  }}>⠿ {i + 1}</div>
+                  <ImageUpload label="" value={url} onChange={u => setGalleryUrl(i, u)}/>
                   <button onClick={() => removeGallerySlot(i)} style={{
-                    position: 'absolute', top: 0, right: 0,
+                    position: 'absolute', top: 0, right: 0, zIndex: 3,
                     background: 'rgba(13,13,13,0.8)', border: 'none', color: 'rgba(250,100,100,0.7)',
                     cursor: 'pointer', fontSize: 11, padding: '4px 8px',
                   }}>✕</button>
@@ -185,7 +221,7 @@ export default function ProjectsAdmin({ initial }: Props) {
         )}
         {visible.map(p => (
           <div key={p.id} style={{
-            display: 'grid', gridTemplateColumns: '48px 1fr auto auto auto auto',
+            display: 'grid', gridTemplateColumns: '48px 1fr auto auto auto auto auto',
             gap: 16, padding: '16px 20px', alignItems: 'center',
             background: editingId === p.id ? 'rgba(200,169,122,0.05)' : 'rgba(255,255,255,0.02)',
             border: `0.5px solid ${editingId === p.id ? A : BORDER}`,
@@ -210,6 +246,11 @@ export default function ProjectsAdmin({ initial }: Props) {
               </p>
             </div>
             <span style={{ fontSize: 9, color: A, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{p.category}</span>
+            <button onClick={() => toggleFeatured(p)} title={p.featured ? 'Retirer de la mise en avant' : 'Mettre en avant'} style={{
+              ...ghostBtn,
+              color: p.featured ? A : 'rgba(250,250,248,0.2)',
+              fontSize: 16, padding: '2px 8px',
+            }}>★</button>
             <button onClick={() => openEdit(p)} style={ghostBtn}>Modifier</button>
             <button onClick={() => handleDelete(p.id)} style={{ ...ghostBtn, color: 'rgba(250,100,100,0.5)' }}>Supprimer</button>
           </div>

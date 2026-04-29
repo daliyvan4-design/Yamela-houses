@@ -13,6 +13,7 @@ export interface ProjectRecord {
   description: string;
   image: string;
   gallery: string[];
+  featured: boolean;
 }
 
 export interface ContactRecord {
@@ -33,8 +34,8 @@ export interface AboutRecord {
 /* ── Projects ── */
 export async function getProjects(): Promise<ProjectRecord[]> {
   const sql = getSql();
-  const rows = await sql`SELECT * FROM projects ORDER BY id`;
-  return (rows as ProjectRecord[]).map(r => ({ ...r, gallery: r.gallery ?? [] }));
+  const rows = await sql`SELECT * FROM projects ORDER BY featured DESC, id`;
+  return (rows as ProjectRecord[]).map(r => ({ ...r, gallery: r.gallery ?? [], featured: r.featured ?? false }));
 }
 
 export async function createProject(p: Omit<ProjectRecord, 'id'>): Promise<ProjectRecord> {
@@ -58,11 +59,12 @@ export async function updateProject(id: number, p: Partial<Omit<ProjectRecord, '
       phase       = COALESCE(${p.phase       ?? null}, phase),
       description = COALESCE(${p.description ?? null}, description),
       image       = COALESCE(${p.image       ?? null}, image),
-      gallery     = COALESCE(${p.gallery !== undefined ? JSON.stringify(p.gallery) : null}, gallery)
+      gallery     = COALESCE(${p.gallery !== undefined ? JSON.stringify(p.gallery) : null}, gallery),
+      featured    = COALESCE(${p.featured    !== undefined ? p.featured : null}, featured)
     WHERE id = ${id}
     RETURNING *
   `;
-  return { ...(row as ProjectRecord), gallery: (row as ProjectRecord).gallery ?? [] };
+  return { ...(row as ProjectRecord), gallery: (row as ProjectRecord).gallery ?? [], featured: (row as ProjectRecord).featured ?? false };
 }
 
 export async function deleteProject(id: number): Promise<void> {
