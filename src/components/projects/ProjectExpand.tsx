@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { T } from '@/lib/tokens';
 import { ProjectRecord as Project } from '@/lib/store';
 import ImgPlaceholder from '@/components/ui/ImgPlaceholder';
@@ -8,12 +8,14 @@ import { useIsMobile } from '@/lib/useIsMobile';
 interface Props { project: Project; onClose: () => void; }
 
 const PANEL_W = 400;
+// Le panneau réapparaît dès que la souris est à moins de ce seuil du bord droit
+const TRIGGER_OFFSET = PANEL_W + 120;
 
 export default function ProjectExpand({ project, onClose }: Props) {
   const mobile = useIsMobile();
   const photos = [project.image, ...(project.gallery ?? [])].filter(Boolean);
   const [active, setActive] = useState(0);
-  const [imgHov, setImgHov] = useState(false);
+  const [panelHidden, setPanelHidden] = useState(false);
   const phase = project.phase ?? 'étude';
 
   useEffect(() => {
@@ -25,6 +27,11 @@ export default function ProjectExpand({ project, onClose }: Props) {
     window.addEventListener('keydown', fn);
     return () => window.removeEventListener('keydown', fn);
   }, [onClose, photos.length]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const fromRight = window.innerWidth - e.clientX;
+    setPanelHidden(fromRight > TRIGGER_OFFSET);
+  }, []);
 
   /* ── MOBILE layout ── */
   if (mobile) return (
@@ -42,33 +49,32 @@ export default function ProjectExpand({ project, onClose }: Props) {
 
   /* ── DESKTOP layout ── */
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 500,
-      background: '#0D0D0D',
-      animation: 'fadeIn 0.4s ease both',
-    }}>
-
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setPanelHidden(false)}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 500,
+        background: '#0D0D0D',
+        animation: 'fadeIn 0.4s ease both',
+      }}
+    >
       {/* Image plein écran */}
-      <div
-        onMouseEnter={() => setImgHov(true)}
-        onMouseLeave={() => setImgHov(false)}
-        style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}
-      >
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Image active */}
         <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
           {photos[active]
             // eslint-disable-next-line @next/next/no-img-element
             ? <img src={photos[active]} alt={project.name} loading="eager" decoding="async"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
+                style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}/>
             : <ImgPlaceholder label={project.name} style={{ width: '100%', height: '100%' }}/>
           }
 
-          {/* Gradient droite — disparaît quand on survole l'image */}
+          {/* Dégradé droite — disparaît quand le panneau est masqué */}
           <div style={{
             position: 'absolute', inset: 0,
             background: `linear-gradient(to right, transparent 55%, rgba(13,13,13,0.95) 100%)`,
-            opacity: imgHov ? 0 : 1,
-            transition: 'opacity 0.45s ease',
+            opacity: panelHidden ? 0 : 1,
+            transition: 'opacity 0.35s ease',
             pointerEvents: 'none',
           }}/>
 
@@ -77,17 +83,17 @@ export default function ProjectExpand({ project, onClose }: Props) {
             <>
               <button onClick={() => setActive(a => Math.max(a - 1, 0))} style={{
                 position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
-                background: 'rgba(13,13,13,0.6)', border: `0.5px solid rgba(200,169,122,0.3)`,
-                color: T.accent, width: 36, height: 36, cursor: 'pointer', fontSize: 14,
+                background: 'rgba(13,13,13,0.75)', border: `1px solid rgba(200,169,122,0.6)`,
+                color: T.accent, width: 40, height: 40, cursor: 'pointer', fontSize: 18,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                opacity: active === 0 ? 0.2 : 1, transition: 'opacity 0.2s',
+                opacity: active === 0 ? 0.4 : 1, transition: 'opacity 0.2s',
               }}>‹</button>
               <button onClick={() => setActive(a => Math.min(a + 1, photos.length - 1))} style={{
                 position: 'absolute', right: PANEL_W + 16, top: '50%', transform: 'translateY(-50%)',
-                background: 'rgba(13,13,13,0.6)', border: `0.5px solid rgba(200,169,122,0.3)`,
-                color: T.accent, width: 36, height: 36, cursor: 'pointer', fontSize: 14,
+                background: 'rgba(13,13,13,0.75)', border: `1px solid rgba(200,169,122,0.6)`,
+                color: T.accent, width: 40, height: 40, cursor: 'pointer', fontSize: 18,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                opacity: active === photos.length - 1 ? 0.2 : 1, transition: 'opacity 0.2s',
+                opacity: active === photos.length - 1 ? 0.4 : 1, transition: 'opacity 0.2s',
               }}>›</button>
             </>
           )}
@@ -110,7 +116,7 @@ export default function ProjectExpand({ project, onClose }: Props) {
           )}
         </div>
 
-        {/* Strip miniatures — limité à gauche du panneau */}
+        {/* Strip miniatures */}
         {photos.length > 1 && (
           <div style={{
             display: 'flex', gap: 4, padding: '8px',
@@ -132,25 +138,35 @@ export default function ProjectExpand({ project, onClose }: Props) {
         )}
       </div>
 
-      {/* Panneau info — flottant à droite, transparent au survol de l'image */}
-      <div
-        onMouseEnter={() => setImgHov(false)}
-        style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: PANEL_W,
-          background: 'rgba(13,13,13,0.96)',
-          borderLeft: `0.5px solid rgba(200,169,122,0.15)`,
-          opacity: imgHov ? 0 : 1,
-          pointerEvents: imgHov ? 'none' : 'auto',
-          transition: 'opacity 0.45s ease',
-        }}
-      >
-        <InfoPanel project={project} phase={phase} onClose={onClose} mobile={false}/>
+      {/* Bouton fermer — toujours visible */}
+      <button onClick={onClose} style={{
+        position: 'absolute', top: 20, right: 20, zIndex: 20,
+        background: 'rgba(13,13,13,0.85)', border: `0.5px solid rgba(200,169,122,0.3)`,
+        cursor: 'pointer', fontFamily: 'var(--font-dm-sans)', fontSize: 10,
+        letterSpacing: '0.18em', textTransform: 'uppercase',
+        color: 'rgba(250,250,248,0.5)', padding: '7px 14px',
+        transition: 'color 0.2s',
+      }}
+        onMouseEnter={e => (e.currentTarget.style.color = T.accent)}
+        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(250,250,248,0.5)')}
+      >Fermer ×</button>
+
+      {/* Panneau info — flottant droite, transparent quand souris loin */}
+      <div style={{
+        position: 'absolute', top: 0, right: 0, bottom: 0, width: PANEL_W,
+        background: 'rgba(13,13,13,0.96)',
+        borderLeft: `0.5px solid rgba(200,169,122,0.15)`,
+        opacity: panelHidden ? 0 : 1,
+        pointerEvents: panelHidden ? 'none' : 'auto',
+        transition: 'opacity 0.35s ease',
+      }}>
+        <InfoPanel project={project} phase={phase} onClose={onClose} mobile={false} hideClose/>
       </div>
     </div>
   );
 }
 
-/* ─── Sous-composants partagés ─────────────────────────────────────── */
+/* ─── Sous-composants ─────────────────────────────────────────────── */
 
 function MobileImageArea({ photos, active, setActive, name }: {
   photos: string[]; active: number; setActive: (fn: (a: number) => number) => void; name: string;
@@ -168,17 +184,17 @@ function MobileImageArea({ photos, active, setActive, name }: {
           <>
             <button onClick={() => setActive(a => Math.max(a - 1, 0))} style={{
               position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
-              background: 'rgba(13,13,13,0.6)', border: `0.5px solid rgba(200,169,122,0.3)`,
-              color: T.accent, width: 36, height: 36, cursor: 'pointer', fontSize: 14,
+              background: 'rgba(13,13,13,0.75)', border: `1px solid rgba(200,169,122,0.6)`,
+              color: T.accent, width: 40, height: 40, cursor: 'pointer', fontSize: 18,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              opacity: active === 0 ? 0.2 : 1, transition: 'opacity 0.2s',
+              opacity: active === 0 ? 0.4 : 1, transition: 'opacity 0.2s',
             }}>‹</button>
             <button onClick={() => setActive(a => Math.min(a + 1, photos.length - 1))} style={{
               position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
-              background: 'rgba(13,13,13,0.6)', border: `0.5px solid rgba(200,169,122,0.3)`,
-              color: T.accent, width: 36, height: 36, cursor: 'pointer', fontSize: 14,
+              background: 'rgba(13,13,13,0.75)', border: `1px solid rgba(200,169,122,0.6)`,
+              color: T.accent, width: 40, height: 40, cursor: 'pointer', fontSize: 18,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              opacity: active === photos.length - 1 ? 0.2 : 1, transition: 'opacity 0.2s',
+              opacity: active === photos.length - 1 ? 0.4 : 1, transition: 'opacity 0.2s',
             }}>›</button>
           </>
         )}
@@ -213,8 +229,8 @@ function MobileImageArea({ photos, active, setActive, name }: {
   );
 }
 
-function InfoPanel({ project, phase, onClose, mobile }: {
-  project: Project; phase: string; onClose: () => void; mobile: boolean;
+function InfoPanel({ project, phase, onClose, mobile, hideClose }: {
+  project: Project; phase: string; onClose: () => void; mobile: boolean; hideClose?: boolean;
 }) {
   return (
     <div style={{
@@ -223,17 +239,20 @@ function InfoPanel({ project, phase, onClose, mobile }: {
       height: '100%', overflowY: 'auto', boxSizing: 'border-box',
       borderTop: mobile ? `0.5px solid rgba(200,169,122,0.15)` : 'none',
     }}>
-      <button onClick={onClose} style={{
-        position: mobile ? 'fixed' : 'absolute', top: 20, right: 20,
-        background: 'rgba(13,13,13,0.8)', border: `0.5px solid rgba(200,169,122,0.2)`,
-        cursor: 'pointer', fontFamily: 'var(--font-dm-sans)', fontSize: 10,
-        letterSpacing: '0.18em', textTransform: 'uppercase',
-        color: 'rgba(250,250,248,0.4)', padding: '6px 12px',
-        transition: 'color 0.2s', zIndex: 10,
-      }}
-        onMouseEnter={e => (e.currentTarget.style.color = T.accent)}
-        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(250,250,248,0.4)')}
-      >Fermer ×</button>
+      {/* Bouton fermer — mobile uniquement (desktop géré en dehors du panneau) */}
+      {!hideClose && (
+        <button onClick={onClose} style={{
+          position: 'fixed', top: 20, right: 20,
+          background: 'rgba(13,13,13,0.85)', border: `0.5px solid rgba(200,169,122,0.3)`,
+          cursor: 'pointer', fontFamily: 'var(--font-dm-sans)', fontSize: 10,
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          color: 'rgba(250,250,248,0.5)', padding: '7px 14px',
+          transition: 'color 0.2s', zIndex: 10,
+        }}
+          onMouseEnter={e => (e.currentTarget.style.color = T.accent)}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(250,250,248,0.5)')}
+        >Fermer ×</button>
+      )}
 
       <div style={{ width: 28, height: '0.5px', background: T.accent, marginBottom: 24 }}/>
 
