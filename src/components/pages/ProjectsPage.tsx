@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { T } from '@/lib/tokens';
 import { catLabels, Category } from '@/lib/data';
 import { ProjectRecord } from '@/lib/store';
@@ -12,9 +13,12 @@ export default function ProjectsPage() {
   const [cat, setCat] = useState<Category>('residentiel');
   const [expanded, setExpanded] = useState<ProjectRecord | null>(null);
   const [all, setAll] = useState<ProjectRecord[]>(() => getCachedProjects() ?? []);
+  const [mounted, setMounted] = useState(false);
   const mobile = useIsMobile();
   const scrollRef = useRef<HTMLDivElement>(null);
   const savedScroll = useRef(0);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (all.length === 0) fetch('/api/projects').then(r => r.json()).then(setAll);
@@ -86,7 +90,10 @@ export default function ProjectsPage() {
         ))}
       </div>
 
-      {expanded && <ProjectExpand project={expanded} onClose={handleClose}/>}
+      {expanded && mounted && createPortal(
+        <ProjectExpand project={expanded} onClose={handleClose}/>,
+        document.body,
+      )}
     </div>
   );
 }
