@@ -60,7 +60,7 @@ export default function BottomTab({ page, setPage }: Props) {
         borderBottom: page === 'hero' ? `1.5px solid ${T.accent}` : '1.5px solid transparent',
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '28px', height: '28px', display: 'block' }}/>
+        <img src={logoSrc} alt="Yamela" style={{ objectFit: 'contain', width: '56px', height: '56px', display: 'block' }}/>
       </button>
 
       {/* Autres onglets */}
