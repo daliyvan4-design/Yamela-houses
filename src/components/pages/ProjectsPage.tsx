@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { T } from '@/lib/tokens';
 import { catLabels, Category } from '@/lib/data';
 import { ProjectRecord } from '@/lib/store';
@@ -13,6 +13,8 @@ export default function ProjectsPage() {
   const [expanded, setExpanded] = useState<ProjectRecord | null>(null);
   const [all, setAll] = useState<ProjectRecord[]>(() => getCachedProjects() ?? []);
   const mobile = useIsMobile();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const savedScroll = useRef(0);
 
   useEffect(() => {
     if (all.length === 0) fetch('/api/projects').then(r => r.json()).then(setAll);
@@ -20,8 +22,22 @@ export default function ProjectsPage() {
 
   const projects = all.filter(p => p.category === cat);
 
+  const handleExpand = (p: ProjectRecord) => {
+    savedScroll.current = scrollRef.current?.scrollTop ?? 0;
+    setExpanded(p);
+  };
+
+  const handleClose = () => {
+    setExpanded(null);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = savedScroll.current;
+      });
+    });
+  };
+
   return (
-    <div className="page-enter" style={{
+    <div ref={scrollRef} className="page-enter" style={{
       padding: mobile ? '28px 16px 80px' : '44px 40px 40px',
       overflowY: 'auto', height: '100%',
     }}>
@@ -66,11 +82,11 @@ export default function ProjectsPage() {
         gap: mobile ? 12 : 2,
       }}>
         {projects.map((p, i) => (
-          <ProjectCard key={p.id} project={p} index={i} onExpand={() => setExpanded(p)}/>
+          <ProjectCard key={p.id} project={p} index={i} onExpand={() => handleExpand(p)}/>
         ))}
       </div>
 
-      {expanded && <ProjectExpand project={expanded} onClose={() => setExpanded(null)}/>}
+      {expanded && <ProjectExpand project={expanded} onClose={handleClose}/>}
     </div>
   );
 }
