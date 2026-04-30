@@ -90,10 +90,6 @@ export default function ProjectCard({ project, index, onExpand }: Props) {
           </div>
           <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 10, color: T.accent, marginTop: 2 }}>→</span>
         </div>
-        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 11, fontWeight: 400,
-          color: 'rgba(250,250,248,0.65)', lineHeight: 1.7, marginTop: 10, letterSpacing: '0.02em' }}>
-          Réponse attentive au site, à la lumière et aux matériaux.
-        </p>
         <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: 8, fontWeight: 400,
           letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(250,250,248,0.55)', marginTop: 10 }}>
           {project.category !== 'mobilier' ? `${project.phase ?? 'étude'} · ` : ''}Cliquer pour agrandir
