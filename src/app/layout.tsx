@@ -16,9 +16,24 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://yamelatdp.com'),
   title: 'Yamela — The Design Project',
   description: 'Laboratoire d\'architecture et design.',
   icons: { icon: '/yamelogo.png', apple: '/yamelogo.png' },
+  openGraph: {
+    title: 'Yamela — The Design Project',
+    description: 'Laboratoire d\'architecture et design.',
+    url: 'https://yamelatdp.com',
+    siteName: 'Yamela',
+    images: [{ url: '/yamelogo.png', width: 1200, height: 1200, alt: 'Yamela' }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yamela — The Design Project',
+    description: 'Laboratoire d\'architecture et design.',
+    images: ['/yamelogo.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
